@@ -22,33 +22,33 @@
 - **Browser modern**: Chrome, Firefox, Safari sau Edge (versiune recentă)
 
 ### Verificare versiuni
-```bash
+\`\`\`bash
 node --version  # Trebuie să fie >= 18.17.0
 npm --version   # Trebuie să fie >= 9.0.0
 git --version   # Orice versiune recentă
-```
+\`\`\`
 
 ---
 
 ## 2. Instalare Dependențe
 
 ### Pasul 1: Clonare Repository
-```bash
+\`\`\`bash
 # Clonează repository-ul
 git clone [URL_REPOSITORY]
 
 # Intră în directorul proiectului
 cd [nume-proiect]
-```
+\`\`\`
 
 ### Pasul 2: Instalare Pachete npm
-```bash
+\`\`\`bash
 # Instalează toate dependențele
 npm install
 
 # Sau folosind yarn (alternativ)
 yarn install
-```
+\`\`\`
 
 **Pachete principale instalate:**
 - Next.js 16 (framework React)
@@ -73,7 +73,7 @@ yarn install
 Accesează **SQL Editor** în Supabase Dashboard și rulează scripturile în ordine:
 
 #### Script 1: Tabela Profiles
-```sql
+\`\`\`sql
 -- Fișier: scripts/001_create_users_and_profiles.sql
 CREATE TABLE IF NOT EXISTS public.profiles (
   id UUID REFERENCES auth.users ON DELETE CASCADE PRIMARY KEY,
@@ -113,10 +113,10 @@ CREATE POLICY "Users can view own profile"
 CREATE POLICY "Users can update own profile"
   ON public.profiles FOR UPDATE
   USING (auth.uid() = id);
-```
+\`\`\`
 
 #### Script 2: Tabela Subscriptions
-```sql
+\`\`\`sql
 -- Fișier: scripts/002_create_subscriptions.sql
 CREATE TABLE IF NOT EXISTS public.subscriptions (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -153,10 +153,10 @@ ALTER TABLE public.subscriptions ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Users can view own subscription"
   ON public.subscriptions FOR SELECT
   USING (auth.uid() = user_id);
-```
+\`\`\`
 
 #### Script 3: Tabela Diagnostics
-```sql
+\`\`\`sql
 -- Fișier: scripts/003_create_diagnostics.sql
 CREATE TABLE IF NOT EXISTS public.diagnostics (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -186,25 +186,25 @@ CREATE POLICY "Users can view own diagnostics"
 CREATE POLICY "Users can insert own diagnostics"
   ON public.diagnostics FOR INSERT
   WITH CHECK (auth.uid() = user_id);
-```
+\`\`\`
 
 #### Script 4: Soft Delete (Opțional)
-```sql
+\`\`\`sql
 -- Fișier: scripts/009_add_soft_delete_columns.sql
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS deleted_at TIMESTAMPTZ;
 ALTER TABLE public.subscriptions ADD COLUMN IF NOT EXISTS deleted_at TIMESTAMPTZ;
 
 CREATE INDEX IF NOT EXISTS idx_profiles_deleted_at ON public.profiles(deleted_at);
 CREATE INDEX IF NOT EXISTS idx_subscriptions_deleted_at ON public.subscriptions(deleted_at);
-```
+\`\`\`
 
 #### Script 5: Admin User (Obligatoriu)
-```sql
+\`\`\`sql
 -- Setează utilizatorul curent ca admin
 UPDATE public.profiles 
 SET is_admin = TRUE 
 WHERE email = 'email-ul-tau@example.com';
-```
+\`\`\`
 
 ---
 
@@ -213,15 +213,15 @@ WHERE email = 'email-ul-tau@example.com';
 ### Pasul 1: Creare Fișier .env.local
 Creează un fișier `.env.local` în root-ul proiectului:
 
-```bash
+\`\`\`bash
 # În directorul proiectului
 touch .env.local
-```
+\`\`\`
 
 ### Pasul 2: Adăugare Variabile
 Deschide `.env.local` și adaugă următoarele variabile:
 
-```bash
+\`\`\`bash
 # Supabase Configuration
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
@@ -241,7 +241,7 @@ NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
 
 # Logging Level (opțional)
 LOG_LEVEL=info
-```
+\`\`\`
 
 ### Unde găsești valorile:
 
@@ -266,22 +266,22 @@ LOG_LEVEL=info
 ## 5. Pornire Aplicație
 
 ### Development Mode (Recomandabil pentru testare)
-```bash
+\`\`\`bash
 # Pornește serverul de development
 npm run dev
 
 # Aplicația va fi disponibilă la:
 # http://localhost:3000
-```
+\`\`\`
 
 ### Production Build
-```bash
+\`\`\`bash
 # Build pentru producție
 npm run build
 
 # Pornește serverul de producție
 npm start
-```
+\`\`\`
 
 ### Verificare Funcționalitate
 1. **Pagina Principală**: http://localhost:3000
@@ -296,17 +296,17 @@ npm start
 
 ### Problema: "Failed to load @supabase/ssr"
 **Soluție:**
-```bash
+\`\`\`bash
 npm install @supabase/ssr @supabase/supabase-js
 npm run dev
-```
+\`\`\`
 
 ### Problema: "Could not find column deleted_at"
 **Soluție:** Rulează scriptul SQL 009 pentru soft delete:
-```sql
+\`\`\`sql
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS deleted_at TIMESTAMPTZ;
 ALTER TABLE public.subscriptions ADD COLUMN IF NOT EXISTS deleted_at TIMESTAMPTZ;
-```
+\`\`\`
 
 ### Problema: "User authentication failed"
 **Cauze posibile:**
@@ -327,7 +327,7 @@ ALTER TABLE public.subscriptions ADD COLUMN IF NOT EXISTS deleted_at TIMESTAMPTZ
 3. Verifică logurile în `logs/app.log`
 
 ### Vizualizare Loguri
-```bash
+\`\`\`bash
 # Vezi toate logurile
 cat logs/app.log
 
@@ -336,13 +336,13 @@ cat logs/error.log
 
 # Urmărește logurile în timp real
 tail -f logs/app.log
-```
+\`\`\`
 
 ---
 
 ## Structura Fișierelor Importante
 
-```
+\`\`\`
 proiect/
 ├── app/                      # Next.js App Router
 │   ├── actions/             # Server Actions
@@ -358,7 +358,7 @@ proiect/
 ├── logs/                    # Fișiere de log (generate automat)
 ├── .env.local              # Variabile de mediu (CREEAZĂ MANUAL)
 └── package.json            # Dependențe npm
-```
+\`\`\`
 
 ---
 

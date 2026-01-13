@@ -37,7 +37,7 @@
 - **Auto-Cleanup:** Job care rulează la 60s pentru ștergerea entry-urilor expirate
 
 **Interfață:**
-```typescript
+\`\`\`typescript
 interface ICache {
   get<T>(key: string): T | null
   set(key: string, data: any, ttlSeconds?: number): void
@@ -47,17 +47,17 @@ interface ICache {
   clear(): void
   getStats(): CacheStats
 }
-```
+\`\`\`
 
 **Structură Entry:**
-```typescript
+\`\`\`typescript
 interface CacheEntry {
   data: any           // Datele cache-uite
   expiry: number      // Timestamp când expiră
   createdAt: number   // Timestamp când a fost creat
   accessCount: number // Număr de accesări
 }
-```
+\`\`\`
 
 ---
 
@@ -65,7 +65,7 @@ interface CacheEntry {
 
 ### Exemplu 1: UserService - Cache pentru Users
 
-```typescript
+\`\`\`typescript
 // lib/services/user.service.ts
 
 async getAllActiveUsers(): Promise<User[]> {
@@ -101,11 +101,11 @@ async updateUser(userId: string, data: Partial<User>) {
   
   return updated
 }
-```
+\`\`\`
 
 ### Exemplu 2: Admin CRUD - Cache pentru Listări
 
-```typescript
+\`\`\`typescript
 // app/actions/admin-crud-actions.ts
 
 export async function getAllUsers() {
@@ -139,7 +139,7 @@ export async function updateUser(userId: string, data: any) {
   
   return { success: true }
 }
-```
+\`\`\`
 
 ---
 
@@ -147,7 +147,7 @@ export async function updateUser(userId: string, data: any) {
 
 ### Pattern-uri Recomandate:
 
-```typescript
+\`\`\`typescript
 // 1. Entitate singulară cu ID
 "user:123:details"
 "diagnostic:456:full"
@@ -167,11 +167,11 @@ export async function updateUser(userId: string, data: any) {
 "user:*"          // Toate cache-urile user
 "diagnostic:*"    // Toate cache-urile diagnostic
 "admin:*"         // Toate cache-urile admin
-```
+\`\`\`
 
 ### Exemplu de Invalidare cu Pattern:
 
-```typescript
+\`\`\`typescript
 // Când se șterge un user, invalidează TOT ce-i legat de el
 cacheService.removeByPattern(`user:${userId}:*`)
 
@@ -180,7 +180,7 @@ cacheService.removeByPattern(`user:${userId}:*`)
 // - user:123:stats
 // - user:123:diagnostics
 // - etc.
-```
+\`\`\`
 
 ---
 
@@ -196,7 +196,7 @@ cacheService.removeByPattern(`user:${userId}:*`)
 | **Admin Dashboard Stats** | 60s | Balans între fresh data și performanță |
 
 **Exemplu:**
-```typescript
+\`\`\`typescript
 // Date critice - TTL scurt
 cacheService.set("user:123:balance", balance, 15) // 15 secunde
 
@@ -205,7 +205,7 @@ cacheService.set("site:settings:all", settings, 600) // 10 minute
 
 // Statistici complexe - TTL mediu
 cacheService.set("admin:reports:monthly", report, 300) // 5 minute
-```
+\`\`\`
 
 ---
 
@@ -213,7 +213,7 @@ cacheService.set("admin:reports:monthly", report, 300) // 5 minute
 
 ### Obținere Statistici
 
-```typescript
+\`\`\`typescript
 const stats = cacheService.getStats()
 
 console.log(\`
@@ -223,16 +223,16 @@ Cache Statistics:
 - Misses: \${stats.misses}
 - Hit Rate: \${stats.hitRate}%
 \`)
-```
+\`\`\`
 
 ### Exemplu Output:
-```
+\`\`\`
 Cache Statistics:
 - Total Entries: 42
 - Hits: 156
 - Misses: 23
 - Hit Rate: 87.15%
-```
+\`\`\`
 
 **Hit Rate Interpretation:**
 - **> 80%:** Excelent - cache-ul funcționează foarte bine
@@ -241,7 +241,7 @@ Cache Statistics:
 
 ### Debugging Cache
 
-```typescript
+\`\`\`typescript
 // Vezi toate cheile din cache
 const allKeys = cacheService.getAllKeys()
 console.log("All cache keys:", allKeys)
@@ -255,7 +255,7 @@ Entry: user:123:details
 - Age: \${info.age}s
 - Access Count: \${info.accessCount}
 \`)
-```
+\`\`\`
 
 ---
 
@@ -265,7 +265,7 @@ Entry: user:123:details
 
 **Locație:** `lib/di/configurator.ts`
 
-```typescript
+\`\`\`typescript
 import { CacheService } from "../services/cache.service"
 
 export class DIConfigurator {
@@ -279,7 +279,7 @@ export class DIConfigurator {
     // Alte servicii...
   }
 }
-```
+\`\`\`
 
 **De ce SINGLETON pentru Cache?**
 - Cache-ul trebuie să fie partajat între toate request-urile
@@ -288,7 +288,7 @@ export class DIConfigurator {
 
 ### Utilizare prin DI
 
-```typescript
+\`\`\`typescript
 // Injecție în constructor
 export class UserService {
   private cacheService: ICache
@@ -304,7 +304,7 @@ export class UserService {
     // ...
   }
 }
-```
+\`\`\`
 
 ---
 
@@ -313,15 +313,15 @@ export class UserService {
 ### 1. Cache la Nivel de Service, Nu Controller
 
 ❌ **NU face așa (în actions):**
-```typescript
+\`\`\`typescript
 export async function getUsers() {
   const users = await supabase.from("profiles").select("*")
   return users // Direct query, fără cache
 }
-```
+\`\`\`
 
 ✅ **FA așa (în service cu cache):**
-```typescript
+\`\`\`typescript
 class UserService {
   async getUsers() {
     const cached = cacheService.get("users:all")
@@ -332,26 +332,26 @@ class UserService {
     return users
   }
 }
-```
+\`\`\`
 
 ### 2. Invalidare Inteligentă
 
 ❌ **NU invalida TOT cache-ul:**
-```typescript
+\`\`\`typescript
 cacheService.clear() // Șterge tot - OVERKILL!
-```
+\`\`\`
 
 ✅ **Invalidează doar ce e necesar:**
-```typescript
+\`\`\`typescript
 // Update user 123
 cacheService.remove("user:123:details")       // Entry specific
 cacheService.removeByPattern("user:123:*")   // Tot ce-i legat de user
 cacheService.remove("users:active:all")       // Lista afectată
-```
+\`\`\`
 
 ### 3. TTL Bazat pe Volatilitate
 
-```typescript
+\`\`\`typescript
 // Date foarte volatile (schimbă des)
 cacheService.set("live:counter", count, 5) // 5s
 
@@ -360,11 +360,11 @@ cacheService.set("user:stats", stats, 60) // 60s
 
 // Date stabile (rare modificări)
 cacheService.set("config:app", config, 600) // 10 min
-```
+\`\`\`
 
 ### 4. Cache-First Strategy
 
-```typescript
+\`\`\`typescript
 async function getData(id: string) {
   // 1. Încearcă cache-ul ÎNTÂI
   const cached = cacheService.get(\`data:\${id}\`)
@@ -378,7 +378,7 @@ async function getData(id: string) {
   
   return data
 }
-```
+\`\`\`
 
 ---
 
@@ -386,7 +386,7 @@ async function getData(id: string) {
 
 ### Test Manual în Console
 
-```typescript
+\`\`\`typescript
 // 1. Set data
 cacheService.set("test:key", { name: "John", age: 30 }, 60)
 
@@ -403,11 +403,11 @@ console.log(cacheService.getStats())
 // 5. Remove
 cacheService.remove("test:key")
 console.log(cacheService.isSet("test:key")) // false
-```
+\`\`\`
 
 ### Test Pattern Matching
 
-```typescript
+\`\`\`typescript
 // Set multiple keys
 cacheService.set("user:1:details", {id: 1})
 cacheService.set("user:1:stats", {total: 10})
@@ -420,7 +420,7 @@ cacheService.removeByPattern("user:1:*")
 console.log(cacheService.isSet("user:1:details")) // false
 console.log(cacheService.isSet("user:1:stats"))   // false
 console.log(cacheService.isSet("user:2:details")) // true (nu e afectat)
-```
+\`\`\`
 
 ---
 

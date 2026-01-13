@@ -66,13 +66,13 @@ Toate aplicațiile primesc punctajul de oficiu.
 | **RESTORE** | `restoreUser()` | `admin-crud-actions.ts:165` | ✅ |
 
 **Ștergere Logică (Soft Delete):**
-```typescript
+\`\`\`typescript
 // admin-crud-actions.ts:145
 const { error } = await supabase
   .from("profiles")
   .update({ deleted_at: new Date().toISOString() })
   .eq("id", userId)
-```
+\`\`\`
 
 **Cheie Străină:** NU (Users este tabelul părinte)
 
@@ -104,21 +104,21 @@ const { error } = await supabase
 | **DELETE (Hard)** | `deleteDiagnostic()` | `admin-crud-actions.ts:404` | ✅ |
 
 **Ștergere Fizică (Hard Delete):**
-```typescript
+\`\`\`typescript
 // admin-crud-actions.ts:415
 const { error } = await supabase
   .from("diagnostics")
   .delete()
   .eq("id", diagnosticId)
-```
+\`\`\`
 
 **Cheie Străină:** ✅ **DA**
-```sql
+\`\`\`sql
 diagnostics.user_id REFERENCES profiles(id)
-```
+\`\`\`
 
 **Demonstrație în Create Form:**
-```tsx
+\`\`\`tsx
 // app/admin/diagnostics/create/page.tsx
 <Select value={userId} onValueChange={setUserId}>
   {users.map(user => (
@@ -127,7 +127,7 @@ diagnostics.user_id REFERENCES profiles(id)
     </SelectItem>
   ))}
 </Select>
-```
+\`\`\`
 
 ---
 
@@ -139,9 +139,9 @@ diagnostics.user_id REFERENCES profiles(id)
 - ✅ Soft Delete: Prin user parent
 
 **Cheie Străină:**
-```sql
+\`\`\`sql
 subscriptions.user_id REFERENCES profiles(id)
-```
+\`\`\`
 
 ---
 
@@ -192,7 +192,7 @@ subscriptions.user_id REFERENCES profiles(id)
 | **Premium** | Diagnosticări avansate + imagini | ✅ |
 
 **Vizualizare Planuri:**
-```tsx
+\`\`\`tsx
 // components/subscription-status.tsx - Afișează tier-ul curent
 <Badge>{subscription.tier.toUpperCase()}</Badge>
 
@@ -200,7 +200,7 @@ subscriptions.user_id REFERENCES profiles(id)
 <PricingCard tier="free" price="Gratuit" />
 <PricingCard tier="standard" price="29 RON/lună" />
 <PricingCard tier="premium" price="99 RON/lună" />
-```
+\`\`\`
 
 ### 3.3 Controale Specifice
 
@@ -212,9 +212,9 @@ subscriptions.user_id REFERENCES profiles(id)
 5. **Status Abonament** - Afișare tier curent și limite
 
 **Flux Complet:**
-```
+\`\`\`
 User Input → Validation → AI Generation → Save to DB → Display Result
-```
+\`\`\`
 
 **Punctaj:** 1.0p / 1.0p ✅
 
@@ -230,7 +230,7 @@ User Input → Validation → AI Generation → Save to DB → Display Result
 ### 4.1 Structura ORM
 
 **Base Class:**
-```typescript
+\`\`\`typescript
 // lib/models/base.model.ts
 export abstract class BaseModel<T> {
   protected abstract tableName: string
@@ -243,7 +243,7 @@ export abstract class BaseModel<T> {
   async hardDelete(id: string): Promise<boolean>
   async count(): Promise<number>
 }
-```
+\`\`\`
 
 ### 4.2 Modele Specifice
 
@@ -256,34 +256,34 @@ export abstract class BaseModel<T> {
 ### 4.3 Exemple Utilizare
 
 **Fără ORM** (direct Supabase):
-```typescript
+\`\`\`typescript
 const { data } = await supabase
   .from('profiles')
   .select('*')
   .eq('id', userId)
   .single()
-```
+\`\`\`
 
 **Cu ORM:**
-```typescript
+\`\`\`typescript
 const user = await userModel.findById(userId)
-```
+\`\`\`
 
 ### 4.4 Metode Specializate
 
 **UserModel:**
-```typescript
+\`\`\`typescript
 async findByEmail(email: string): Promise<User | null>
 async findAdmins(): Promise<User[]>
 async findWithSubscriptions(userId: string)
-```
+\`\`\`
 
 **DiagnosticModel:**
-```typescript
+\`\`\`typescript
 async findByUser(userId: string): Promise<Diagnostic[]>
 async findRecent(userId: string, limit: number)
 async findBySeverity(severity: string)
-```
+\`\`\`
 
 **Beneficii Demonstrate:**
 - ✅ Reusabilitate (metode comune în BaseModel)
@@ -315,7 +315,7 @@ async findBySeverity(severity: string)
 ### 5.2 Dependency Injection
 
 **Constructor Injection:**
-```typescript
+\`\`\`typescript
 // lib/services/user.service.ts
 export class UserService {
   constructor(
@@ -323,23 +323,23 @@ export class UserService {
     private subscriptionModel: SubscriptionModel = new SubscriptionModel()
   ) {}
 }
-```
+\`\`\`
 
 **Singleton Pattern:**
-```typescript
+\`\`\`typescript
 export const userService = new UserService()
 export const diagnosticService = new DiagnosticService()
-```
+\`\`\`
 
 **Testare cu Mock Dependencies:**
-```typescript
+\`\`\`typescript
 const mockUserModel = { findById: jest.fn() }
 const service = new UserService(mockUserModel)
-```
+\`\`\`
 
 ### 5.3 Services Utilizează Models
 
-```typescript
+\`\`\`typescript
 // lib/services/user.service.ts
 async getAllActiveUsers(): Promise<User[]> {
   // Service folosește Model
@@ -358,7 +358,7 @@ async updateUser(userId: string, data: Partial<User>) {
   // Update prin Model
   return await this.userModel.update(userId, data)
 }
-```
+\`\`\`
 
 **Punctaj:** 1.0p / 1.0p ✅
 
@@ -374,7 +374,7 @@ async updateUser(userId: string, data: Partial<User>) {
 ### 6.1 Business Logic în DiagnosticService
 
 **1. Verificare Permisiuni Diagnosticare:**
-```typescript
+\`\`\`typescript
 // lib/services/diagnostic.service.ts
 async canUserDiagnose(userId: string): Promise<{ can: boolean; reason?: string }> {
   const subscription = await this.subscriptionModel.findByUser(userId)
@@ -405,10 +405,10 @@ async canUserDiagnose(userId: string): Promise<{ can: boolean; reason?: string }
   // Standard și Premium: nelimitate
   return { can: true }
 }
-```
+\`\`\`
 
 **2. Generare Prompt Bazat pe Tier:**
-```typescript
+\`\`\`typescript
 // lib/services/diagnostic.service.ts
 private buildPromptForTier(tier: string, vehicleInfo, symptoms): string {
   const baseInfo = `Vehicle: ${vehicleInfo.make} ${vehicleInfo.model} ${vehicleInfo.year}
@@ -453,10 +453,10 @@ Provide a straightforward diagnostic with:
 - Rough cost estimate in RON
   `
 }
-```
+\`\`\`
 
 **3. Actualizare Contor Folosire:**
-```typescript
+\`\`\`typescript
 // lib/services/diagnostic.service.ts
 async incrementUsageCounter(userId: string): Promise<void> {
   const subscription = await this.subscriptionModel.findByUser(userId)
@@ -478,12 +478,12 @@ async incrementUsageCounter(userId: string): Promise<void> {
     }
   }
 }
-```
+\`\`\`
 
 ### 6.2 Business Logic în UserService
 
 **1. Validare Email Unic:**
-```typescript
+\`\`\`typescript
 // lib/services/user.service.ts
 async updateUser(userId: string, data: Partial<User>): Promise<User | null> {
   // Business Rule: Email trebuie să fie unic
@@ -496,10 +496,10 @@ async updateUser(userId: string, data: Partial<User>): Promise<User | null> {
   
   return await this.userModel.update(userId, data)
 }
-```
+\`\`\`
 
 **2. Validare Ștergere User cu Abonament Activ:**
-```typescript
+\`\`\`typescript
 // lib/services/user.service.ts
 async deleteUser(userId: string): Promise<boolean> {
   // Business Rule: Nu șterge user cu abonament plătit activ
@@ -523,12 +523,12 @@ async deleteUser(userId: string): Promise<boolean> {
   
   return await this.userModel.softDelete(userId)
 }
-```
+\`\`\`
 
 ### 6.3 Business Logic în SubscriptionService
 
 **1. Upgrade/Downgrade Tier:**
-```typescript
+\`\`\`typescript
 // lib/services/subscription.service.ts
 async changeTier(
   userId: string, 
@@ -560,10 +560,10 @@ async changeTier(
     logger.info("User upgraded from free tier", { userId, oldTier, newTier })
   }
 }
-```
+\`\`\`
 
 **2. Verificare Status Plată:**
-```typescript
+\`\`\`typescript
 // lib/services/subscription.service.ts
 async checkPaymentStatus(userId: string): Promise<{
   status: 'active' | 'past_due' | 'canceled' | 'none',
@@ -604,13 +604,13 @@ async checkPaymentStatus(userId: string): Promise<{
   
   return { status: 'active', message: 'Subscription active' }
 }
-```
+\`\`\`
 
 ### 6.4 Utilizare Services în Pagina Principală (Dashboard)
 
 **Flow Complet Diagnosticare:**
 
-```typescript
+\`\`\`typescript
 // app/actions/diagnostic-actions.ts
 export async function generateDiagnosis(data: {
   symptoms: string
@@ -660,11 +660,11 @@ export async function generateDiagnosis(data: {
   
   return { success: true, diagnostic: result }
 }
-```
+\`\`\`
 
 **Dashboard UI folosește Services:**
 
-```tsx
+\`\`\`tsx
 // app/dashboard/page.tsx
 export default async function DashboardPage() {
   const user = await getCurrentUser()
@@ -692,7 +692,7 @@ export default async function DashboardPage() {
     </div>
   )
 }
-```
+\`\`\`
 
 ### 6.5 Rezumat Business Logic
 
@@ -725,7 +725,7 @@ export default async function DashboardPage() {
 ### 7.1 Cache System
 
 **Implementare:**
-```typescript
+\`\`\`typescript
 // lib/services/cache.service.ts
 export class MemoryCacheService {
   private cache: Map<string, CachedItem>
@@ -737,10 +737,10 @@ export class MemoryCacheService {
   clear(): void
   getStats(): CacheStats
 }
-```
+\`\`\`
 
 **Utilizare în Admin Actions:**
-```typescript
+\`\`\`typescript
 // app/actions/admin-crud-actions.ts:15
 const cacheKey = "admin:users:all"
 const cachedUsers = cacheService.get<any>(cacheKey)
@@ -752,7 +752,7 @@ if (cachedUsers) {
 // ... fetch from DB ...
 
 cacheService.set(cacheKey, profiles, 60) // TTL 60 secunde
-```
+\`\`\`
 
 **Cache Keys:**
 - `admin:users:all` - Lista utilizatori (60s)
@@ -761,18 +761,18 @@ cacheService.set(cacheKey, profiles, 60) // TTL 60 secunde
 - `admin:stats:dashboard` - Statistici admin (60s)
 
 **Invalidare Cache:**
-```typescript
+\`\`\`typescript
 // După update user
 cacheService.remove("admin:users:all")
 cacheService.removeByPattern(`user:${userId}:*`)
-```
+\`\`\`
 
 **Documentație:** `DOCUMENTATIE_LAB12.md` ✅
 
 ### 7.2 Sistem de Loguri
 
 **Implementare:**
-```typescript
+\`\`\`typescript
 // lib/logging/logger.config.ts
 export class Logger {
   info(message: string, context?: any): void
@@ -781,16 +781,16 @@ export class Logger {
   debug(message: string, context?: any): void
   trace(message: string, context?: any): void
 }
-```
+\`\`\`
 
 **Utilizare în Aplicație:**
-```typescript
+\`\`\`typescript
 // app/actions/admin-crud-actions.ts
 console.log("[AdminCRUD] Fetching all users")
 console.log("[AdminCRUD] Successfully retrieved all users, count:", profiles?.length)
 console.error("[AdminCRUD] Error fetching users from database:", error)
 console.warn("[AdminCRUD] Unauthorized access attempt to getAllUsers")
-```
+\`\`\`
 
 **Log Locations:**
 - Authentication events (`auth-actions.ts`)
@@ -803,13 +803,13 @@ console.warn("[AdminCRUD] Unauthorized access attempt to getAllUsers")
 ### 7.3 Dependency Injection
 
 **Implementare Container:**
-```typescript
+\`\`\`typescript
 // lib/di/container.ts
 export class DIContainer {
   register<T>(key: string, factory: () => T, lifetime: Lifetime): void
   resolve<T>(key: string): T
 }
-```
+\`\`\`
 
 **Lifetimes Suportate:**
 - **SINGLETON** - O instanță pentru toată aplicația
@@ -817,7 +817,7 @@ export class DIContainer {
 - **TRANSIENT** - Instanță nouă la fiecare resolve
 
 **Utilizare în Services:**
-```typescript
+\`\`\`typescript
 // lib/services/user.service.ts
 export class UserService {
   constructor(
@@ -825,13 +825,13 @@ export class UserService {
     private subscriptionModel: SubscriptionModel = new SubscriptionModel()
   ) {}
 }
-```
+\`\`\`
 
 **Configurare:**
-```typescript
+\`\`\`typescript
 // lib/di/configurator.ts
 container.register('IUserService', () => new UserService(), Lifetime.SINGLETON)
-```
+\`\`\`
 
 **Documentație:** `DOCUMENTATIE_LAB10.md` ✅
 
@@ -840,45 +840,45 @@ container.register('IUserService', () => new UserService(), Lifetime.SINGLETON)
 **Implementare:**
 
 **Users (Soft Delete):**
-```typescript
+\`\`\`typescript
 // app/actions/admin-crud-actions.ts:145
 const { error } = await supabase
   .from("profiles")
   .update({ deleted_at: new Date().toISOString() })
   .eq("id", userId)
-```
+\`\`\`
 
 **Subscriptions (Soft Delete prin User Parent):**
-```sql
+\`\`\`sql
 -- Când users are deleted_at, subscriptions sunt excluse automat
 SELECT * FROM subscriptions
 JOIN profiles ON subscriptions.user_id = profiles.id
 WHERE profiles.deleted_at IS NULL
-```
+\`\`\`
 
 **Diagnostics (Hard Delete):**
-```typescript
+\`\`\`typescript
 // app/actions/admin-crud-actions.ts:415
 const { error } = await supabase
   .from("diagnostics")
   .delete()
   .eq("id", diagnosticId)
-```
+\`\`\`
 
 **Filtrare Șterse Logic:**
-```typescript
+\`\`\`typescript
 // Toate query-urile exclud deleted_at
 .is("deleted_at", null)
-```
+\`\`\`
 
 **Restore Functionality:**
-```typescript
+\`\`\`typescript
 // app/actions/admin-crud-actions.ts:175
 const { error } = await supabase
   .from("profiles")
   .update({ deleted_at: null })
   .eq("id", userId)
-```
+\`\`\`
 
 **Documentație:** `DOCUMENTATIE_LAB9.md` ✅
 
@@ -1008,7 +1008,7 @@ const { error } = await supabase
 7. Access at `localhost:3000`
 
 **Exemplu Environment Variables:**
-```env
+\`\`\`env
 # Supabase
 SUPABASE_URL=https://xxx.supabase.co
 SUPABASE_ANON_KEY=eyJxxx...
@@ -1021,7 +1021,7 @@ API_KEY_GROQ_API_KEY=gsk_xxx...
 # Stripe
 STRIPE_SECRET_KEY=sk_test_xxx...
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_xxx...
-```
+\`\`\`
 
 ### 8.4 Documentație Laboratoare
 

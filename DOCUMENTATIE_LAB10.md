@@ -8,7 +8,7 @@
 
 ### Structura Implementată
 
-```
+\`\`\`
 lib/
 ├── services/                    # Business Layer
 │   ├── user.service.ts         # Logică users
@@ -25,7 +25,7 @@ lib/
     ├── interfaces.ts            # Service Interfaces
     ├── container.ts             # DI Container
     └── configurator.ts          # Service Configuration
-```
+\`\`\`
 
 ### Logica de Business Implementată
 
@@ -49,7 +49,7 @@ lib/
 
 **Fișier: `lib/di/interfaces.ts`**
 
-```typescript
+\`\`\`typescript
 export interface IUserService {
   getAllActiveUsers(): Promise<any[]>
   getUserWithDetails(userId: string): Promise<any>
@@ -61,7 +61,7 @@ export interface IDiagnosticService {
   canUserDiagnose(userId: string): Promise<{ can: boolean; reason?: string }>
   performDiagnostic(userId: string, vehicleInfo: any, symptoms: string): Promise<any>
 }
-```
+\`\`\`
 
 ### DI Container (similar cu Autofac)
 
@@ -69,7 +69,7 @@ export interface IDiagnosticService {
 
 Implementează pattern-ul Service Locator cu suport pentru 3 lifetimes:
 
-```typescript
+\`\`\`typescript
 export enum ServiceLifetime {
   SINGLETON = 'singleton',  // O instanță pentru întreaga aplicație
   SCOPED = 'scoped',       // O instanță per request
@@ -81,13 +81,13 @@ export class DIContainer {
   resolve<T>(token: string): T
   clearScope(): void  // Pentru SCOPED
 }
-```
+\`\`\`
 
 ### Configurator (similar cu ContainerConfigurer.ConfigureContainer())
 
 **Fișier: `lib/di/configurator.ts`**
 
-```typescript
+\`\`\`typescript
 export class DIConfigurator {
   // Configurare SINGLETON
   static configureSingleton(): void {
@@ -107,7 +107,7 @@ export class DIConfigurator {
     container.registerTransient('IDiagnosticService', () => new DiagnosticService())
   }
 }
-```
+\`\`\`
 
 ---
 
@@ -137,17 +137,17 @@ export class DIConfigurator {
 - Testare mai dificilă
 
 **Exemplu din aplicație:**
-```typescript
+\`\`\`typescript
 container.registerSingleton('ICacheService', () => new CacheService())
 // Aceeași instanță de cache pentru toată aplicația
-```
+\`\`\`
 
 **Diagrama:**
-```
+\`\`\`
 Request 1 ──┐
 Request 2 ──┼──> ACEEAȘI INSTANȚĂ (CacheService #1)
 Request 3 ──┘
-```
+\`\`\`
 
 ---
 
@@ -175,17 +175,17 @@ Request 3 ──┘
 - Necesită management explicit al scope-ului
 
 **Exemplu din aplicație:**
-```typescript
+\`\`\`typescript
 container.registerScoped('IUserService', () => new UserService())
 // Instanță nouă pentru fiecare request, dar reutilizată în request
-```
+\`\`\`
 
 **Diagrama:**
-```
+\`\`\`
 Request 1 ──> UserService #1 (instanță pentru Request 1)
 Request 2 ──> UserService #2 (instanță pentru Request 2)
 Request 3 ──> UserService #3 (instanță pentru Request 3)
-```
+\`\`\`
 
 ---
 
@@ -214,18 +214,18 @@ Request 3 ──> UserService #3 (instanță pentru Request 3)
 - Pressure pe garbage collector
 
 **Exemplu din aplicație:**
-```typescript
+\`\`\`typescript
 container.registerTransient('IDiagnosticService', () => new DiagnosticService())
 // Instanță nouă de fiecare dată când este folosit
-```
+\`\`\`
 
 **Diagrama:**
-```
+\`\`\`
 Usage 1 ──> DiagnosticService #1
 Usage 2 ──> DiagnosticService #2
 Usage 3 ──> DiagnosticService #3
 Usage 4 ──> DiagnosticService #4
-```
+\`\`\`
 
 ---
 
@@ -247,7 +247,7 @@ Usage 4 ──> DiagnosticService #4
 
 ### 5.1 Strategie SINGLETON pentru toate serviciile
 
-```typescript
+\`\`\`typescript
 // În lib/di/configurator.ts
 DIConfigurator.configureSingleton()
 
@@ -255,7 +255,7 @@ DIConfigurator.configureSingleton()
 container.resolve('IUserService')      // Instanță #1
 container.resolve('IUserService')      // Aceeași instanță #1
 container.resolve('IUserService')      // Aceeași instanță #1
-```
+\`\`\`
 
 **Observație:** Cache-ul funcționează perfect, dar state-ul este partajat global!
 
@@ -263,7 +263,7 @@ container.resolve('IUserService')      // Aceeași instanță #1
 
 ### 5.2 Strategie SCOPED pentru servicii de business
 
-```typescript
+\`\`\`typescript
 // În lib/di/configurator.ts
 DIConfigurator.configureScoped()
 
@@ -275,7 +275,7 @@ container.clearScope()                 // Curăță la sfârșitul request-ului
 // Request 2:
 container.resolve('IUserService')      // Instanță #2 (Request 2)
 container.resolve('IUserService')      // Aceeași instanță #2
-```
+\`\`\`
 
 **Observație:** Izolare perfectă între request-uri, performanță bună!
 
@@ -283,7 +283,7 @@ container.resolve('IUserService')      // Aceeași instanță #2
 
 ### 5.3 Strategie TRANSIENT pentru testare
 
-```typescript
+\`\`\`typescript
 // În lib/di/configurator.ts
 DIConfigurator.configureTransient()
 
@@ -291,7 +291,7 @@ DIConfigurator.configureTransient()
 container.resolve('IUserService')      // Instanță #1
 container.resolve('IUserService')      // Instanță #2
 container.resolve('IUserService')      // Instanță #3
-```
+\`\`\`
 
 **Observație:** Izolare maximă, dar overhead mare!
 
@@ -299,7 +299,7 @@ container.resolve('IUserService')      // Instanță #3
 
 ### 5.4 Strategie MIXED (Recomandată pentru Producție)
 
-```typescript
+\`\`\`typescript
 // În lib/di/configurator.ts
 DIConfigurator.configureMixed()
 
@@ -310,7 +310,7 @@ container.registerSingleton('ICacheService', ...)
 // Business Services - SCOPED (per request)
 container.registerScoped('IUserService', ...)
 container.registerScoped('IDiagnosticService', ...)
-```
+\`\`\`
 
 **Observație:** Cel mai bun echilibru între performanță, memorie și izolare!
 
@@ -320,28 +320,28 @@ container.registerScoped('IDiagnosticService', ...)
 
 ### Pas 1: Editați `lib/di/configurator.ts`
 
-```typescript
+\`\`\`typescript
 // Decomentează linia dorită:
 
 // DIConfigurator.configureSingleton()  // Toate SINGLETON
 // DIConfigurator.configureScoped()     // User/Diagnostic SCOPED
 DIConfigurator.configureMixed()      // Recomandat: Mixed strategy
 // DIConfigurator.configureTransient()  // Toate TRANSIENT
-```
+\`\`\`
 
 ### Pas 2: Verificați console logs
 
-```
+\`\`\`
 [DI] Configuring container with MIXED lifetime strategy
 [DI] Registering service: ILoggerService with lifetime: singleton
 [DI] Registering service: ICacheService with lifetime: singleton
 [DI] Registering service: IUserService with lifetime: scoped
 [DI] Registering service: IDiagnosticService with lifetime: scoped
-```
+\`\`\`
 
 ### Pas 3: Testați diferențele
 
-```typescript
+\`\`\`typescript
 // Test SINGLETON
 const service1 = container.resolve('IUserService')
 const service2 = container.resolve('IUserService')
@@ -356,7 +356,7 @@ console.log(service1 === service3)  // false (după clearScope)
 const service4 = container.resolve('IUserService')
 const service5 = container.resolve('IUserService')
 console.log(service4 === service5)  // false pentru TRANSIENT
-```
+\`\`\`
 
 ---
 
@@ -364,7 +364,7 @@ console.log(service4 === service5)  // false pentru TRANSIENT
 
 ### Exemplu: Admin CRUD Actions
 
-```typescript
+\`\`\`typescript
 // app/actions/admin-crud-actions.ts
 
 import { container } from '@/lib/di/container'
@@ -379,11 +379,11 @@ export async function getAllUsers() {
   const users = await userService.getAllActiveUsers()
   return { users }
 }
-```
+\`\`\`
 
 ### Exemplu: Diagnostic Actions
 
-```typescript
+\`\`\`typescript
 // app/actions/diagnostic-actions.ts
 
 import { container } from '@/lib/di/container'
@@ -400,7 +400,7 @@ export async function generateDiagnosis(userId: string, symptoms: string) {
   const result = await diagnosticService.performDiagnostic(userId, vehicleInfo, symptoms)
   return result
 }
-```
+\`\`\`
 
 ---
 

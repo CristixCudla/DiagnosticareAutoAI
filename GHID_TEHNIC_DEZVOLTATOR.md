@@ -22,7 +22,7 @@
 
 ### 1.1 Technology Stack
 
-```json
+\`\`\`json
 {
   "framework": "Next.js 16.0.0",
   "runtime": "React 19.2 (with Activity API)",
@@ -31,11 +31,11 @@
   "ui-components": "shadcn/ui (customizat)",
   "routing": "Next.js App Router (file-based)"
 }
-```
+\`\`\`
 
 ### 1.2 Project Structure
 
-```
+\`\`\`
 app/
 ├── page.tsx                    # Homepage (/)
 ├── dashboard/page.tsx          # User Dashboard (/dashboard)
@@ -71,12 +71,12 @@ components/
     ├── button.tsx
     ├── card.tsx
     └── ...
-```
+\`\`\`
 
 ### 1.3 Rendering Strategies
 
 **Server Components (Default în Next.js 16)**
-```tsx
+\`\`\`tsx
 // app/dashboard/page.tsx
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -92,10 +92,10 @@ export default async function DashboardPage() {
     </div>
   )
 }
-```
+\`\`\`
 
 **Client Components (pentru interactivitate)**
-```tsx
+\`\`\`tsx
 // components/new-diagnostic-form.tsx
 "use client" // Marcator pentru Client Component
 
@@ -114,7 +114,7 @@ export function NewDiagnosticForm() {
   
   return <form action={handleSubmit}>...</form>
 }
-```
+\`\`\`
 
 **Când folosim fiecare:**
 - **Server Component:** Fetch data, SEO, no JavaScript needed
@@ -124,7 +124,7 @@ export function NewDiagnosticForm() {
 
 **Tailwind CSS 4.0 cu Design System**
 
-```css
+\`\`\`css
 /* app/globals.css */
 @import "tailwindcss";
 
@@ -139,10 +139,10 @@ export function NewDiagnosticForm() {
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 }
-```
+\`\`\`
 
 **Component Styling Pattern:**
-```tsx
+\`\`\`tsx
 // Consistent dark theme cu red accents
 <div className="min-h-screen bg-gray-950 text-white">
   <h1 className="text-4xl font-bold bg-gradient-to-r from-red-500 to-white bg-clip-text text-transparent">
@@ -153,10 +153,10 @@ export function NewDiagnosticForm() {
     Generează Diagnostic
   </button>
 </div>
-```
+\`\`\`
 
 **Responsive Design:**
-```tsx
+\`\`\`tsx
 <div className="
   grid 
   grid-cols-1          /* Mobile: 1 column */
@@ -166,13 +166,13 @@ export function NewDiagnosticForm() {
 ">
   {/* Cards */}
 </div>
-```
+\`\`\`
 
 ### 1.5 Form Handling
 
 **Server Actions (no API routes needed)**
 
-```tsx
+\`\`\`tsx
 // components/new-diagnostic-form.tsx
 export function NewDiagnosticForm() {
   return (
@@ -201,7 +201,7 @@ export async function generateDiagnostic(formData: FormData) {
   
   return result
 }
-```
+\`\`\`
 
 **Beneficii:**
 - Type-safe: TypeScript verifică tipurile
@@ -214,7 +214,7 @@ export async function generateDiagnostic(formData: FormData) {
 
 ### 2.1 Technology Stack
 
-```json
+\`\`\`json
 {
   "runtime": "Node.js 20.9+",
   "framework": "Next.js Server Actions",
@@ -224,11 +224,11 @@ export async function generateDiagnostic(formData: FormData) {
   "ai": "Groq API (LLaMA 3.1 70B)",
   "payments": "Stripe (sandbox)"
 }
-```
+\`\`\`
 
 ### 2.2 Layers Architecture
 
-```
+\`\`\`
 ┌─────────────────────────────────────────────────────────┐
 │ CONTROLLER LAYER (Server Actions)                       │
 │ → app/actions/*.ts                                      │
@@ -261,13 +261,13 @@ export async function generateDiagnostic(formData: FormData) {
 │ → Foreign Keys: user_id → users.id                      │
 │ → Indexes pentru performanță                            │
 └─────────────────────────────────────────────────────────┘
-```
+\`\`\`
 
 ### 2.3 ORM Implementation
 
 **BaseModel Abstract Class:**
 
-```typescript
+\`\`\`typescript
 // lib/models/base.model.ts
 export abstract class BaseModel<T> {
   protected tableName: string
@@ -361,11 +361,11 @@ export abstract class BaseModel<T> {
     return !error
   }
 }
-```
+\`\`\`
 
 **Extending BaseModel:**
 
-```typescript
+\`\`\`typescript
 // lib/models/user.model.ts
 export interface User {
   id: string
@@ -415,13 +415,13 @@ export class UserModel extends BaseModel<User> {
     return data
   }
 }
-```
+\`\`\`
 
 ### 2.4 Services Layer
 
 **UserService Business Logic:**
 
-```typescript
+\`\`\`typescript
 // lib/services/user.service.ts
 export class UserService {
   private userModel: UserModel
@@ -509,7 +509,7 @@ export class UserService {
     return success
   }
 }
-```
+\`\`\`
 
 **De ce Services Layer?**
 - **Separation of Concerns:** Business logic separată de DB operations
@@ -540,7 +540,7 @@ export class UserService {
 
 **Server-Side Client (pentru Server Components):**
 
-```typescript
+\`\`\`typescript
 // lib/supabase/server.ts
 import { createServerClient } from "@supabase/ssr"
 import { cookies } from "next/headers"
@@ -565,11 +565,11 @@ export async function createClient() {
     }
   )
 }
-```
+\`\`\`
 
 **Client-Side Client (pentru Client Components):**
 
-```typescript
+\`\`\`typescript
 // lib/supabase/client.ts
 import { createBrowserClient } from "@supabase/ssr"
 
@@ -579,11 +579,11 @@ export function createClient() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   )
 }
-```
+\`\`\`
 
 **Usage:**
 
-```tsx
+\`\`\`tsx
 // Server Component
 import { createClient } from "@/lib/supabase/server"
 
@@ -607,13 +607,13 @@ export function LoginForm() {
     })
   }
 }
-```
+\`\`\`
 
 ### 3.3 Authentication Flow
 
 **Sign Up:**
 
-```typescript
+\`\`\`typescript
 // app/actions/auth-actions.ts
 "use server"
 
@@ -651,11 +651,11 @@ export async function signUp(formData: FormData) {
   
   return { success: true }
 }
-```
+\`\`\`
 
 **Sign In:**
 
-```typescript
+\`\`\`typescript
 export async function signIn(formData: FormData) {
   const email = formData.get("email") as string
   const password = formData.get("password") as string
@@ -673,11 +673,11 @@ export async function signIn(formData: FormData) {
   
   redirect("/dashboard")
 }
-```
+\`\`\`
 
 **Middleware (Session Refresh):**
 
-```typescript
+\`\`\`typescript
 // middleware.ts
 import { createServerClient } from "@supabase/ssr"
 import { NextResponse } from "next/server"
@@ -713,7 +713,7 @@ export const config = {
     "/((?!_next/static|_next/image|favicon.ico).*)",
   ],
 }
-```
+\`\`\`
 
 ### 3.4 Row Level Security (RLS)
 
@@ -721,7 +721,7 @@ export const config = {
 
 **Exemplu RLS Policy pentru `diagnostics`:**
 
-```sql
+\`\`\`sql
 -- Users pot vedea doar propriile diagnostice
 CREATE POLICY "Users can view own diagnostics"
 ON diagnostics FOR SELECT
@@ -742,7 +742,7 @@ USING (
     AND users.role = 'admin'
   )
 );
-```
+\`\`\`
 
 **Beneficii RLS:**
 - Securitate la nivel de DB, nu la nivel de aplicație
@@ -771,7 +771,7 @@ USING (
 
 **Diagnostic Generation cu Groq:**
 
-```typescript
+\`\`\`typescript
 // app/actions/diag.ts
 "use server"
 
@@ -878,7 +878,7 @@ export async function generateDiagnostic(formData: FormData) {
     id: diagnostic.id
   }
 }
-```
+\`\`\`
 
 **Key Points:**
 - **System Prompt:** Instrucțiuni detaliate pentru AI (format, limbă, structură)
@@ -890,12 +890,12 @@ export async function generateDiagnostic(formData: FormData) {
 ### 4.3 Prompt Engineering
 
 **Bad Prompt:**
-```
+\`\`\`
 "Diagnosticare mașină cu simptome X"
-```
+\`\`\`
 
 **Good Prompt:**
-```
+\`\`\`
 Ești un mecanic auto expert cu 20 ani experiență.
 
 CONTEXT:
@@ -915,7 +915,7 @@ Diagnostichează problema și returnează JSON cu:
 FORMAT: JSON valid, fără text suplimentar.
 LIMBĂ: Exclusiv română.
 COST: În lei românești (RON), nu EUR/USD.
-```
+\`\`\`
 
 **Why Good Prompt Works:**
 - Specific role (mecanic expert)
@@ -932,7 +932,7 @@ COST: În lei românești (RON), nu EUR/USD.
 
 **Pattern:** Fetch data pe server, pass ca props
 
-```tsx
+\`\`\`tsx
 // Server Component (app/dashboard/page.tsx)
 export default async function Dashboard() {
   const supabase = await createClient()
@@ -951,13 +951,13 @@ export default async function Dashboard() {
     </div>
   )
 }
-```
+\`\`\`
 
 ### 5.2 Client State (React Hooks)
 
 **useState pentru local UI state:**
 
-```tsx
+\`\`\`tsx
 "use client"
 
 export function NewDiagnosticForm() {
@@ -980,13 +980,13 @@ export function NewDiagnosticForm() {
     </form>
   )
 }
-```
+\`\`\`
 
 ### 5.3 Form State (Server Actions)
 
 **useFormState pentru server validation:**
 
-```tsx
+\`\`\`tsx
 "use client"
 
 import { useFormState } from "react"
@@ -1004,7 +1004,7 @@ export function UserEditForm({ user }) {
     </form>
   )
 }
-```
+\`\`\`
 
 ---
 
@@ -1012,7 +1012,7 @@ export function UserEditForm({ user }) {
 
 ### 6.1 Complete Auth Flow Diagram
 
-```
+\`\`\`
 ┌─────────────────────────────────────────────────────────┐
 │ 1. User Accesses /auth/login                            │
 └─────────────────────────────────────────────────────────┘
@@ -1052,11 +1052,11 @@ export function UserEditForm({ user }) {
 │                                 .getUser()               │
 │    If no user → redirect to /auth/login                 │
 └─────────────────────────────────────────────────────────┘
-```
+\`\`\`
 
 ### 6.2 Protected Routes
 
-```typescript
+\`\`\`typescript
 // app/dashboard/page.tsx
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -1070,11 +1070,11 @@ export default async function DashboardPage() {
   // User authenticated, proceed
   return <div>Welcome {user.email}</div>
 }
-```
+\`\`\`
 
 ### 6.3 Admin Protection
 
-```typescript
+\`\`\`typescript
 // app/admin/page.tsx
 import { checkIsAdmin } from "@/app/actions/admin-actions"
 
@@ -1104,7 +1104,7 @@ export async function checkIsAdmin() {
   
   return dbUser?.role === "admin"
 }
-```
+\`\`\`
 
 ---
 
@@ -1112,7 +1112,7 @@ export async function checkIsAdmin() {
 
 ### 7.1 Complete ERD (Entity Relationship Diagram)
 
-```
+\`\`\`
 ┌──────────────────────────────────────────────────────────┐
 │ users                                                     │
 ├──────────────────────────────────────────────────────────┤
@@ -1157,13 +1157,13 @@ export async function checkIsAdmin() {
 │ created_at          TIMESTAMPTZ DEFAULT NOW()            │
 │ deleted_at          TIMESTAMPTZ (Soft Delete)            │
 └──────────────────────────────────────────────────────────┘
-```
+\`\`\`
 
 ### 7.2 SQL Schema Scripts
 
 **users + subscriptions:**
 
-```sql
+\`\`\`sql
 -- scripts/001_create_users_and_profiles.sql
 
 CREATE TABLE users (
@@ -1194,11 +1194,11 @@ CREATE TABLE subscriptions (
 
 CREATE INDEX idx_subscriptions_user_id ON subscriptions(user_id);
 CREATE INDEX idx_subscriptions_tier ON subscriptions(tier);
-```
+\`\`\`
 
 **diagnostics:**
 
-```sql
+\`\`\`sql
 -- scripts/003_create_diagnostics.sql
 
 CREATE TABLE diagnostics (
@@ -1218,11 +1218,11 @@ CREATE TABLE diagnostics (
 CREATE INDEX idx_diagnostics_user_id ON diagnostics(user_id);
 CREATE INDEX idx_diagnostics_severity ON diagnostics(severity);
 CREATE INDEX idx_diagnostics_created_at ON diagnostics(created_at DESC);
-```
+\`\`\`
 
 ### 7.3 Row Level Security Policies
 
-```sql
+\`\`\`sql
 -- Enable RLS
 ALTER TABLE diagnostics ENABLE ROW LEVEL SECURITY;
 
@@ -1246,7 +1246,7 @@ USING (
     AND users.role = 'admin'
   )
 );
-```
+\`\`\`
 
 ---
 
@@ -1267,7 +1267,7 @@ USING (
 
 **Exemplu comparație:**
 
-```typescript
+\`\`\`typescript
 // OLD WAY: REST API
 // app/api/users/[id]/route.ts
 export async function GET(request, { params }) {
@@ -1291,13 +1291,13 @@ export async function getUser(id: string): Promise<User> {
 
 // Client:
 const user = await getUser(id)  // User type! ✅
-```
+\`\`\`
 
 ### 8.2 CRUD Operations
 
 **Standard CRUD pattern pentru orice entitate:**
 
-```typescript
+\`\`\`typescript
 // app/actions/admin-crud-actions.ts
 "use server"
 
@@ -1404,7 +1404,7 @@ export async function deleteUser(id: string) {
   revalidatePath("/admin/users")
   return { success: true }
 }
-```
+\`\`\`
 
 ---
 
@@ -1414,7 +1414,7 @@ export async function deleteUser(id: string) {
 
 **Implementation:**
 
-```typescript
+\`\`\`typescript
 // lib/services/cache.service.ts
 
 interface CacheEntry<T> {
@@ -1483,32 +1483,32 @@ export class MemoryCacheService {
 }
 
 export const cacheService = new MemoryCacheService()
-```
+\`\`\`
 
 ### 9.2 Cache Invalidation Strategies
 
 **1. Time-based (TTL):**
-```typescript
+\`\`\`typescript
 cacheService.set("users:all", users, 60)  // Expire după 60s
-```
+\`\`\`
 
 **2. Event-based (on mutation):**
-```typescript
+\`\`\`typescript
 // După UPDATE user
 cacheService.removeByPattern(`user:${userId}`)
 cacheService.delete("users:all")
-```
+\`\`\`
 
 **3. Pattern-based:**
-```typescript
+\`\`\`typescript
 // Invalidate toate cache-urile legate de user
 cacheService.removeByPattern(`user:${userId}`)
 // Șterge: user:123:details, user:123:stats, user:123:diagnostics
-```
+\`\`\`
 
 ### 9.3 Cache Usage în Services
 
-```typescript
+\`\`\`typescript
 // lib/services/user.service.ts
 
 async getAllActiveUsers(): Promise<User[]> {
@@ -1531,7 +1531,7 @@ async getAllActiveUsers(): Promise<User[]> {
   
   return users
 }
-```
+\`\`\`
 
 **Performance Impact:**
 - DB query: ~50ms
@@ -1547,11 +1547,11 @@ async getAllActiveUsers(): Promise<User[]> {
 **Step-by-Step:**
 
 1. **Push to GitHub:**
-```bash
+\`\`\`bash
 git add .
 git commit -m "Ready for production"
 git push origin main
-```
+\`\`\`
 
 2. **Import în Vercel:**
 - Accesați [vercel.com](https://vercel.com)
@@ -1560,7 +1560,7 @@ git push origin main
 - Vercel detectează automat Next.js
 
 3. **Configure Environment Variables:**
-```
+\`\`\`
 SUPABASE_URL=...
 SUPABASE_ANON_KEY=...
 SUPABASE_SERVICE_ROLE_KEY=...
@@ -1569,7 +1569,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=...
 API_KEY_GROQ_API_KEY=...
 STRIPE_SECRET_KEY=...
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=...
-```
+\`\`\`
 
 4. **Deploy:**
 - Click "Deploy"

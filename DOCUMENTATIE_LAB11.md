@@ -25,7 +25,7 @@ Winston este echivalentul NLog pentru Node.js și oferă un sistem robust de log
 
 ### Arhitectura Logging
 
-```
+\`\`\`
 Logger Config (lib/logging/logger.config.ts)
     ↓
 Winston Instance (singleton)
@@ -33,7 +33,7 @@ Winston Instance (singleton)
 Transports (File + Console)
     ↓
 Log Files (logs/app.log, logs/error.log)
-```
+\`\`\`
 
 ### Caracteristici Principale
 - **Logare în fișiere** cu rotație automată
@@ -48,7 +48,7 @@ Log Files (logs/app.log, logs/error.log)
 
 ### Fișier: `lib/logging/logger.config.ts`
 
-```typescript
+\`\`\`typescript
 import winston from "winston"
 import path from "path"
 
@@ -125,7 +125,7 @@ export class Logger {
     logger.debug(message, { context: this.context, ...meta })
   }
 }
-```
+\`\`\`
 
 ### Comparație cu NLog
 
@@ -145,7 +145,7 @@ export class Logger {
 
 #### Admin CRUD Actions (`app/actions/admin-crud-actions.ts`)
 
-```typescript
+\`\`\`typescript
 import { Logger } from "@/lib/logging/logger.config"
 
 const logger = new Logger("AdminCRUD")
@@ -201,11 +201,11 @@ export async function deleteUser(userId: string) {
     return { error: "Eroare" }
   }
 }
-```
+\`\`\`
 
 #### Diagnostic Actions (`app/actions/diagnostic-actions.ts`)
 
-```typescript
+\`\`\`typescript
 import { Logger } from "@/lib/logging/logger.config"
 
 const logger = new Logger("Diagnostics")
@@ -252,11 +252,11 @@ export async function generateDiagnosis(data: any) {
     return { error: "Eroare" }
   }
 }
-```
+\`\`\`
 
 #### Authentication Actions (`app/actions/auth-actions.ts`)
 
-```typescript
+\`\`\`typescript
 import { Logger } from "@/lib/logging/logger.config"
 
 const logger = new Logger("Authentication")
@@ -296,31 +296,31 @@ export async function signUp(formData: FormData) {
   logger.info("User signed up successfully", { email })
   redirect("/auth/sign-up-success")
 }
-```
+\`\`\`
 
 ---
 
 ## 5. Exemple de Utilizare
 
 ### Logare Simplă
-```typescript
+\`\`\`typescript
 const logger = new Logger("MyModule")
 
 logger.info("User logged in")
 // Output: 2025-01-15 10:30:45 [INFO] [MyModule]: User logged in
-```
+\`\`\`
 
 ### Logare cu Metadata
-```typescript
+\`\`\`typescript
 logger.info("User updated profile", { 
   userId: "123", 
   changes: { name: "John" } 
 })
 // Output: 2025-01-15 10:30:45 [INFO] [MyModule]: User updated profile {"userId":"123","changes":{"name":"John"}}
-```
+\`\`\`
 
 ### Logare Erori
-```typescript
+\`\`\`typescript
 try {
   // Cod care poate arunca erori
 } catch (error) {
@@ -329,17 +329,17 @@ try {
   })
 }
 // Output include stack trace complet
-```
+\`\`\`
 
 ### Logare Warning
-```typescript
+\`\`\`typescript
 if (!hasPermission) {
   logger.warn("Unauthorized access attempt", { 
     userId: user.id, 
     resource: "/admin" 
   })
 }
-```
+\`\`\`
 
 ---
 
@@ -356,27 +356,27 @@ Winston suportă următoarele nivele (în ordine descrescătoare a severității
 7. **silly** - Totul (development only)
 
 ### Configurare Nivel Default
-```bash
+\`\`\`bash
 # În .env.local
 LOG_LEVEL=info  # Doar info și mai sus
 
 # Pentru development
 LOG_LEVEL=debug # Include și debug logs
-```
+\`\`\`
 
 ---
 
 ## 7. Fișiere de Log
 
 ### Structura Directoarelor
-```
+\`\`\`
 proiect/
 ├── logs/
 │   ├── app.log          # Toate logurile
 │   ├── app.1.log        # Fișier rotit (mai vechi)
 │   ├── error.log        # Doar erori
 │   └── error.1.log      # Erori mai vechi
-```
+\`\`\`
 
 ### Rotație Automată
 - **Maxsize**: 5MB per fișier
@@ -384,7 +384,7 @@ proiect/
 - **Naming**: app.log, app.1.log, app.2.log...
 
 ### Citire Loguri
-```bash
+\`\`\`bash
 # Vezi ultimele 50 linii
 tail -n 50 logs/app.log
 
@@ -396,14 +396,14 @@ grep "ERROR" logs/app.log
 
 # Caută după context
 grep "AdminCRUD" logs/app.log
-```
+\`\`\`
 
 ---
 
 ## 8. Best Practices
 
 ### 1. Folosește Context Descriptiv
-```typescript
+\`\`\`typescript
 // ✅ Bun
 const logger = new Logger("UserAuthentication")
 const logger = new Logger("DiagnosticGeneration")
@@ -411,16 +411,16 @@ const logger = new Logger("DiagnosticGeneration")
 // ❌ Rău
 const logger = new Logger("Handler")
 const logger = new Logger("Utils")
-```
+\`\`\`
 
 ### 2. Include Metadata Relevantă
-```typescript
+\`\`\`typescript
 // ✅ Bun
 logger.info("User created", { userId: user.id, email: user.email })
 
 // ❌ Rău
 logger.info("User created")
-```
+\`\`\`
 
 ### 3. Log-uri la Puncte Cheie
 - **Început și sfârșit** de operații
@@ -430,13 +430,13 @@ logger.info("User created")
 - **Operații CRUD** (Create, Read, Update, Delete)
 
 ### 4. Nu Loga Informații Sensibile
-```typescript
+\`\`\`typescript
 // ❌ NU loga parole, tokens, date card
 logger.info("User login", { email, password }) // RĂU!
 
 // ✅ Logează doar informații safe
 logger.info("User login attempt", { email })
-```
+\`\`\`
 
 ### 5. Folosește Niveluri Corecte
 - `error` - Pentru erori adevărate

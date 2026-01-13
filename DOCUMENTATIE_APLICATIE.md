@@ -56,7 +56,7 @@ Aplicația **Diagnosticare Auto cu AI** oferă utilizatorilor posibilitatea de a
 
 Aplicația implementează paradigma MVC cu următoarele niveluri:
 
-```
+\`\`\`
 ┌─────────────────────────────────────────┐
 │           VIEW (Components)              │
 │  - React Components                      │
@@ -87,20 +87,20 @@ Aplicația implementează paradigma MVC cu următoarele niveluri:
 │  - PostgreSQL                            │
 │  - Row Level Security                    │
 └─────────────────────────────────────────┘
-```
+\`\`\`
 
 ### 2.2 Dependency Injection
 
 Serviciile folosesc Dependency Injection prin constructor:
 
-```typescript
+\`\`\`typescript
 export class UserService {
   constructor(
     private userModel: UserModel = new UserModel(),
     private subscriptionModel: SubscriptionModel = new SubscriptionModel()
   ) {}
 }
-```
+\`\`\`
 
 **Beneficii:**
 - Testabilitate (mock dependencies în teste)
@@ -134,7 +134,7 @@ export class UserService {
 ### 4.1 Entități Principale
 
 #### **Profiles** (Utilizatori)
-```sql
+\`\`\`sql
 CREATE TABLE profiles (
   id UUID PRIMARY KEY,
   email TEXT UNIQUE NOT NULL,
@@ -144,10 +144,10 @@ CREATE TABLE profiles (
   updated_at TIMESTAMPTZ DEFAULT NOW(),
   deleted_at TIMESTAMPTZ -- Soft delete
 );
-```
+\`\`\`
 
 #### **Subscriptions** (Abonamente)
-```sql
+\`\`\`sql
 CREATE TABLE subscriptions (
   id UUID PRIMARY KEY,
   user_id UUID REFERENCES profiles(id), -- Cheie străină
@@ -161,10 +161,10 @@ CREATE TABLE subscriptions (
   updated_at TIMESTAMPTZ DEFAULT NOW(),
   deleted_at TIMESTAMPTZ -- Soft delete
 );
-```
+\`\`\`
 
 #### **Diagnostics** (Diagnosticări)
-```sql
+\`\`\`sql
 CREATE TABLE diagnostics (
   id UUID PRIMARY KEY,
   user_id UUID REFERENCES profiles(id), -- Cheie străină
@@ -178,7 +178,7 @@ CREATE TABLE diagnostics (
   updated_at TIMESTAMPTZ DEFAULT NOW(),
   deleted_at TIMESTAMPTZ -- Soft delete
 );
-```
+\`\`\`
 
 ### 4.2 Relații
 
@@ -201,7 +201,7 @@ Toate tabelele au coloana `deleted_at` pentru ștergere logică:
 
 **BaseModel** - Clasa abstractă cu operații CRUD:
 
-```typescript
+\`\`\`typescript
 export abstract class BaseModel<T> {
   async findAll(): Promise<T[]>
   async findById(id: string): Promise<T | null>
@@ -211,36 +211,36 @@ export abstract class BaseModel<T> {
   async hardDelete(id: string): Promise<boolean>
   async count(): Promise<number>
 }
-```
+\`\`\`
 
 **UserModel** - Extinde BaseModel:
 
-```typescript
+\`\`\`typescript
 export class UserModel extends BaseModel<User> {
   async findByEmail(email: string): Promise<User | null>
   async findAdmins(): Promise<User[]>
   async findWithSubscriptions(userId: string)
 }
-```
+\`\`\`
 
 ### 5.2 VIEW - React Components
 
 **Fișiere:** `components/**/*.tsx`
 
 **Index View** - Listă utilizatori:
-```tsx
+\`\`\`tsx
 <UserManagementTable users={users} />
-```
+\`\`\`
 
 **Details View** - Detalii utilizator:
-```tsx
+\`\`\`tsx
 <UserDetailsView user={user} />
-```
+\`\`\`
 
 **Edit View** - Formular editare:
-```tsx
+\`\`\`tsx
 <UserEditForm user={user} />
-```
+\`\`\`
 
 **Elemente UI:**
 - Casete text: `<Input />`
@@ -253,38 +253,38 @@ export class UserModel extends BaseModel<User> {
 **Fișiere:** `app/actions/*.ts`
 
 **Index Action** - GET listă utilizatori:
-```typescript
+\`\`\`typescript
 export async function getAllUsers() {
   const users = await userService.getAllActiveUsers()
   return { users }
 }
-```
+\`\`\`
 
 **Details Action** - GET detalii:
-```typescript
+\`\`\`typescript
 export async function getUserDetails(userId: string) {
   const user = await userService.getUserWithDetails(userId)
   return { user }
 }
-```
+\`\`\`
 
 **Edit Action** - POST actualizare:
-```typescript
+\`\`\`typescript
 export async function updateUser(userId: string, data: Partial<User>) {
   await userService.updateUser(userId, data)
   revalidatePath('/admin/users')
   return { success: true }
 }
-```
+\`\`\`
 
 **Delete Action** - DELETE soft:
-```typescript
+\`\`\`typescript
 export async function deleteUser(userId: string) {
   await userService.deleteUser(userId)
   revalidatePath('/admin/users')
   return { success: true }
 }
-```
+\`\`\`
 
 ---
 
@@ -300,18 +300,18 @@ export async function deleteUser(userId: string) {
 ### 6.2 Exemplu Utilizare
 
 **Fără ORM** (direct Supabase):
-```typescript
+\`\`\`typescript
 const { data, error } = await supabase
   .from('profiles')
   .select('*')
   .eq('id', userId)
   .single()
-```
+\`\`\`
 
 **Cu ORM**:
-```typescript
+\`\`\`typescript
 const user = await userModel.findById(userId)
-```
+\`\`\`
 
 ### 6.3 Operații Suportate
 
@@ -345,7 +345,7 @@ Nivelul Services conține **logica de business** a aplicației:
 
 **Business Logic Examples:**
 
-```typescript
+\`\`\`typescript
 // Validare email unic
 async updateUser(userId: string, data: Partial<User>) {
   if (data.email) {
@@ -365,7 +365,7 @@ async deleteUser(userId: string) {
   }
   return await this.userModel.softDelete(userId)
 }
-```
+\`\`\`
 
 ### 7.3 DiagnosticService
 
@@ -373,7 +373,7 @@ async deleteUser(userId: string) {
 
 **Logică Business Specifică:**
 
-```typescript
+\`\`\`typescript
 // Verificare permisiuni utilizator
 async canUserDiagnose(userId: string) {
   const subscription = await subscriptionModel.findByUser(userId)
@@ -399,16 +399,16 @@ private buildPromptForTier(tier: string, vehicleInfo, symptoms) {
   }
   return `BASIC ANALYSIS - straightforward diagnostic...`
 }
-```
+\`\`\`
 
 ### 7.4 Singleton Pattern
 
 Toate serviciile sunt exportate ca singletons:
 
-```typescript
+\`\`\`typescript
 export const userService = new UserService()
 export const diagnosticService = new DiagnosticService()
-```
+\`\`\`
 
 **Beneficii:**
 - O singură instanță în toată aplicația
@@ -425,7 +425,7 @@ export const diagnosticService = new DiagnosticService()
 
 **Implementare:**
 
-```typescript
+\`\`\`typescript
 export class CacheService {
   private memoryCache: Map<string, { data: any; expiry: number }>
 
@@ -443,11 +443,11 @@ export class CacheService {
     return cached.data as T
   }
 }
-```
+\`\`\`
 
 **Utilizare:**
 
-```typescript
+\`\`\`typescript
 async getAllActiveUsers() {
   const cacheKey = "users:active:all"
   const cached = cacheService.get<User[]>(cacheKey)
@@ -461,7 +461,7 @@ async getAllActiveUsers() {
   cacheService.set(cacheKey, users, 60) // Cache 1 min
   return users
 }
-```
+\`\`\`
 
 **Cache Keys Used:**
 - `users:active:all` - Lista utilizatori (60s TTL)
@@ -476,7 +476,7 @@ async getAllActiveUsers() {
 
 **Singleton Logger:**
 
-```typescript
+\`\`\`typescript
 export class LoggerService {
   private static instance: LoggerService
   
@@ -499,15 +499,15 @@ export class LoggerService {
     console.warn(`[WARN] ${message}`, context)
   }
 }
-```
+\`\`\`
 
 **Utilizare în aplicație:**
 
-```typescript
+\`\`\`typescript
 logger.info("User login", { userId, email })
 logger.error("Failed to create diagnostic", error, { userId })
 logger.warn("Cache miss for key", { key })
-```
+\`\`\`
 
 **Log Locations:**
 - Authentication events
@@ -520,24 +520,24 @@ logger.warn("Cache miss for key", { key })
 
 **Pattern:**
 
-```typescript
+\`\`\`typescript
 export class UserService {
   constructor(
     private userModel: UserModel = new UserModel(),
     private subscriptionModel: SubscriptionModel = new SubscriptionModel()
   ) {}
 }
-```
+\`\`\`
 
 **Testing cu DI:**
 
-```typescript
+\`\`\`typescript
 // Test cu mock dependencies
 const mockUserModel = {
   findById: jest.fn().mockResolvedValue(mockUser)
 }
 const service = new UserService(mockUserModel)
-```
+\`\`\`
 
 **Beneficii:**
 - Testare ușoară cu mocks
@@ -548,7 +548,7 @@ const service = new UserService(mockUserModel)
 
 **Implementare:**
 
-```typescript
+\`\`\`typescript
 async softDelete(id: string): Promise<boolean> {
   const { error } = await supabase
     .from(this.tableName)
@@ -557,15 +557,15 @@ async softDelete(id: string): Promise<boolean> {
   
   return !error
 }
-```
+\`\`\`
 
 **Politici RLS:**
 
-```sql
+\`\`\`sql
 CREATE POLICY "select_non_deleted"
   ON profiles FOR SELECT
   USING (deleted_at IS NULL);
-```
+\`\`\`
 
 **Beneficii:**
 - Audit trail complet
@@ -580,7 +580,7 @@ CREATE POLICY "select_non_deleted"
 ### 9.1 Acces Admin
 
 **Autorizare:**
-```typescript
+\`\`\`typescript
 export async function checkIsAdmin() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -595,16 +595,16 @@ export async function checkIsAdmin() {
   
   return profile?.is_admin || false
 }
-```
+\`\`\`
 
 **Middleware Protection:**
-```typescript
+\`\`\`typescript
 export default async function AdminPage() {
   const isAdmin = await checkIsAdmin()
   if (!isAdmin) redirect('/dashboard')
   // ... render admin content
 }
-```
+\`\`\`
 
 ### 9.2 CRUD Utilizatori
 
@@ -620,7 +620,7 @@ export default async function AdminPage() {
 
 **Exemplu Index:**
 
-```tsx
+\`\`\`tsx
 // app/admin/users/page.tsx
 export default async function UsersIndexPage() {
   const { users } = await getAllUsers()
@@ -636,11 +636,11 @@ export default async function UsersIndexPage() {
     </Card>
   )
 }
-```
+\`\`\`
 
 **View Tabel:**
 
-```tsx
+\`\`\`tsx
 // components/admin/user-management-table.tsx
 export function UserManagementTable({ users }) {
   return (
@@ -685,7 +685,7 @@ export function UserManagementTable({ users }) {
     </Table>
   )
 }
-```
+\`\`\`
 
 ### 9.3 CRUD Diagnosticări
 
@@ -703,7 +703,7 @@ Diagnostics.user_id → Profiles.id
 
 **Create Form:**
 
-```tsx
+\`\`\`tsx
 // app/admin/diagnostics/create/page.tsx
 <Select 
   value={userId} 
@@ -720,13 +720,13 @@ Diagnostics.user_id → Profiles.id
     ))}
   </SelectContent>
 </Select>
-```
+\`\`\`
 
 ### 9.4 Dashboard Admin
 
 **Statistici Afișate:**
 
-```typescript
+\`\`\`typescript
 export async function getAdminStats() {
   return {
     stats: {
@@ -747,11 +747,11 @@ export async function getAdminStats() {
     }
   }
 }
-```
+\`\`\`
 
 **Dashboard UI:**
 
-```tsx
+\`\`\`tsx
 // app/admin/page.tsx
 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
   <Card>
@@ -774,7 +774,7 @@ export async function getAdminStats() {
   
   {/* More cards... */}
 </div>
-```
+\`\`\`
 
 ---
 
@@ -794,7 +794,7 @@ export async function getAdminStats() {
 
 **Controller:**
 
-```typescript
+\`\`\`typescript
 // app/actions/diagnostic-actions.ts
 export async function generateDiagnosis(data: {
   symptoms: string
@@ -817,11 +817,11 @@ export async function generateDiagnosis(data: {
   
   return { success: true, diagnostic: result }
 }
-```
+\`\`\`
 
 **Service Logic:**
 
-```typescript
+\`\`\`typescript
 // lib/services/diagnostic.service.ts
 async performDiagnostic(userId, vehicleInfo, symptoms) {
   // 1. Check permissions
@@ -861,7 +861,7 @@ async performDiagnostic(userId, vehicleInfo, symptoms) {
   
   return saved
 }
-```
+\`\`\`
 
 ### 10.2 Planuri Abonament
 
@@ -878,7 +878,7 @@ async performDiagnostic(userId, vehicleInfo, symptoms) {
 
 **Pagina Pricing:**
 
-```tsx
+\`\`\`tsx
 // app/pricing/page.tsx
 <div className="grid gap-6 lg:grid-cols-3">
   <PricingCard
@@ -912,13 +912,13 @@ async performDiagnostic(userId, vehicleInfo, symptoms) {
     ]}
   />
 </div>
-```
+\`\`\`
 
 ### 10.3 Gestionare Abonament
 
 **Dashboard User:**
 
-```tsx
+\`\`\`tsx
 // app/dashboard/page.tsx
 <Card>
   <CardHeader>
@@ -953,7 +953,7 @@ async performDiagnostic(userId, vehicleInfo, symptoms) {
     </div>
   </CardContent>
 </Card>
-```
+\`\`\`
 
 ---
 
@@ -963,7 +963,7 @@ async performDiagnostic(userId, vehicleInfo, symptoms) {
 
 **Autentificare:**
 
-```typescript
+\`\`\`typescript
 // lib/supabase/server.ts
 export async function createClient() {
   const cookieStore = await cookies()
@@ -983,11 +983,11 @@ export async function createClient() {
     }
   )
 }
-```
+\`\`\`
 
 **Row Level Security:**
 
-```sql
+\`\`\`sql
 -- Users can only see their own data
 CREATE POLICY "users_select_own"
   ON profiles FOR SELECT
@@ -1002,13 +1002,13 @@ CREATE POLICY "admins_select_all"
       WHERE id = auth.uid() AND is_admin = true
     )
   );
-```
+\`\`\`
 
 ### 11.2 Stripe
 
 **Checkout Session:**
 
-```typescript
+\`\`\`typescript
 // app/actions/stripe-actions.ts
 export async function createCheckoutSession(tier: 'standard' | 'premium') {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
@@ -1027,11 +1027,11 @@ export async function createCheckoutSession(tier: 'standard' | 'premium') {
   
   return { sessionId: session.id, url: session.url }
 }
-```
+\`\`\`
 
 **Webhook Handler:**
 
-```typescript
+\`\`\`typescript
 // app/api/webhooks/stripe/route.ts
 export async function POST(req: Request) {
   const sig = req.headers.get('stripe-signature')!
@@ -1056,24 +1056,24 @@ export async function POST(req: Request) {
   
   return new Response('OK', { status: 200 })
 }
-```
+\`\`\`
 
 ### 11.3 Groq AI
 
 **Configurare:**
 
-```typescript
+\`\`\`typescript
 // lib/services/diagnostic.service.ts
 const groq = createGroq({
   apiKey: process.env.API_KEY_GROQ_API_KEY
 })
 
 const model = groq("meta-llama/llama-4-maverick-17b-128e-instruct")
-```
+\`\`\`
 
 **Structured Output:**
 
-```typescript
+\`\`\`typescript
 const { object } = await generateObject({
   model,
   schema: z.object({
@@ -1085,7 +1085,7 @@ const { object } = await generateObject({
   }),
   prompt: `Analyze these car symptoms: ${symptoms}`
 })
-```
+\`\`\`
 
 ---
 
@@ -1101,7 +1101,7 @@ const { object } = await generateObject({
 
 ### 12.2 Instalare
 
-```bash
+\`\`\`bash
 # Clone repository
 git clone [repository-url]
 cd aplicatie-diagnosticare-auto
@@ -1111,11 +1111,11 @@ pnpm install
 
 # Setup environment variables
 cp .env.example .env.local
-```
+\`\`\`
 
 ### 12.3 Variabile Mediu
 
-```env
+\`\`\`env
 # Supabase
 NEXT_PUBLIC_SUPABASE_URL=https://[project-id].supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=[anon-key]
@@ -1132,11 +1132,11 @@ STRIPE_WEBHOOK_SECRET=[webhook-secret]
 # App
 NEXT_PUBLIC_URL=http://localhost:3000
 NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL=http://localhost:3000/auth/callback
-```
+\`\`\`
 
 ### 12.4 Configurare Database
 
-```bash
+\`\`\`bash
 # Rulează scripturile SQL în ordine:
 # 1. scripts/001_create_users_and_profiles.sql
 # 2. scripts/002_create_subscriptions.sql
@@ -1144,11 +1144,11 @@ NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL=http://localhost:3000/auth/callback
 # 4. scripts/007_fix_diagnostics_foreign_key.sql
 # 5. scripts/008_fix_subscriptions_foreign_key.sql
 # 6. scripts/009_add_soft_delete_columns.sql
-```
+\`\`\`
 
 ### 12.5 Rulare Aplicație
 
-```bash
+\`\`\`bash
 # Development
 pnpm dev
 
@@ -1157,18 +1157,18 @@ pnpm build
 
 # Production
 pnpm start
-```
+\`\`\`
 
 Aplicația va rula pe `http://localhost:3000`
 
 ### 12.6 Creare Cont Admin
 
-```sql
+\`\`\`sql
 -- Rulează în Supabase SQL Editor
 UPDATE profiles
 SET is_admin = true
 WHERE email = 'your-email@example.com';
-```
+\`\`\`
 
 ---
 

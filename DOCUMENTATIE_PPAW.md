@@ -35,7 +35,7 @@
 **Implementare:** `lib/models/base.model.ts` - BaseModel abstract class
 
 **Caracteristici:**
-```typescript
+\`\`\`typescript
 - findAll(options?) → SELECT * FROM table
 - findById(id) → SELECT * WHERE id = ?
 - create(data) → INSERT INTO table
@@ -43,7 +43,7 @@
 - softDelete(id) → UPDATE table SET deleted_at = NOW()
 - hardDelete(id) → DELETE FROM table WHERE id = ?
 - count() → SELECT COUNT(*) FROM table
-```
+\`\`\`
 
 **De ce am ales ORM custom?**
 - Control complet asupra query-urilor
@@ -54,7 +54,7 @@
 
 ### 1.2 Arhitectura Aplicației
 
-```
+\`\`\`
 ┌─────────────────────────────────────────────────────────┐
 │                     PRESENTATION LAYER                   │
 │  app/                                                    │
@@ -106,7 +106,7 @@
 │  ├── Supabase Auth (JWT Authentication)                 │
 │  └── Stripe (Payments - sandbox mode)                   │
 └─────────────────────────────────────────────────────────┘
-```
+\`\`\`
 
 #### Fluxul unei Cereri (Request Flow)
 
@@ -140,7 +140,7 @@
 
 **Metode cheie:**
 
-```typescript
+\`\`\`typescript
 getAllActiveUsers()
   → Cache check ("users:active:all")
   → Fetch from DB via UserModel.findAll()
@@ -167,7 +167,7 @@ deleteUser(userId)
   → Invalidate cache
   → Logger.info("User soft deleted")
   → Return success
-```
+\`\`\`
 
 #### DiagnosticService (`lib/services/diagnostic.service.ts`)
 
@@ -191,7 +191,7 @@ deleteUser(userId)
 
 **Pattern:** Singleton Pattern + Service Lifetimes (inspirat din Autofac .NET)
 
-```typescript
+\`\`\`typescript
 // Lifetimes
 SINGLETON → O instanță globală (UserService, CacheService)
 SCOPED → O instanță per request (DB connections)
@@ -202,7 +202,7 @@ container.registerSingleton("UserService", () => new UserService())
 container.registerScoped("DiagnosticService", () => new DiagnosticService())
 
 const userService = container.resolve<UserService>("UserService")
-```
+\`\`\`
 
 **Beneficii:**
 - Loose coupling: componentele nu depind direct unele de altele
@@ -214,23 +214,23 @@ const userService = container.resolve<UserService>("UserService")
 **Implementare:** `lib/services/cache.service.ts` - MemoryCacheService
 
 **Caracteristici:**
-```typescript
+\`\`\`typescript
 set(key, value, ttl) → Salvează în Map cu expirare
 get(key) → Returnează valoare sau null dacă expirat
 delete(key) → Șterge un singur key
 removeByPattern(pattern) → Șterge toate key-urile care match "*pattern*"
 clear() → Golește tot cache-ul
 getStats() → Returnează { hits, misses, size, hitRate }
-```
+\`\`\`
 
 **Strategii de invalidare:**
-```typescript
+\`\`\`typescript
 // Update user → invalidate toate cache-urile legate de el
 cacheService.removeByPattern(`user:${userId}`)
 
 // Creează diagnostic → invalidate stats
 cacheService.removeByPattern("stats")
-```
+\`\`\`
 
 **Performanță:**
 - Reduce query-uri DB cu ~70%
@@ -242,17 +242,17 @@ cacheService.removeByPattern("stats")
 **Implementare:** `lib/logging/logger.config.ts` - Logger class
 
 **Nivele de logging:**
-```typescript
+\`\`\`typescript
 logger.info("User logged in", { userId, email })
 logger.warn("Free diagnostics limit reached", { userId })
 logger.error("Failed to create diagnostic", error, { userId })
-```
+\`\`\`
 
 **Output:**
-```
+\`\`\`
 [2026-01-15 10:30:45] [INFO] User logged in { userId: "abc123", email: "user@example.com" }
 [2026-01-15 10:31:20] [ERROR] Failed to create diagnostic Error: AI API timeout { userId: "abc123" }
-```
+\`\`\`
 
 **Utilizare:**
 - Debugging: urmărirea flow-ului request-urilor
@@ -263,13 +263,13 @@ logger.error("Failed to create diagnostic", error, { userId })
 
 **Implementare:** `lib/models/base.model.ts` → `softDelete(id)`
 
-```sql
+\`\`\`sql
 -- În loc de DELETE, facem UPDATE
 UPDATE users SET deleted_at = NOW(), updated_at = NOW() WHERE id = ?
 
 -- Query-urile exclud automat recordurile șterse
 SELECT * FROM users WHERE deleted_at IS NULL
-```
+\`\`\`
 
 **Beneficii:**
 - Recuperare date șterse accidental
@@ -279,24 +279,24 @@ SELECT * FROM users WHERE deleted_at IS NULL
 ### 2.6 Librarii Suplimentare Utilizate
 
 #### Frontend
-```json
+\`\`\`json
 {
   "next": "^16.0.0",           // Framework React cu SSR/SSG
   "react": "^19.2.0",           // UI Library cu Activity API
   "tailwindcss": "^4.0.0",      // Utility-first CSS
   "typescript": "^5.6.0"        // Type safety
 }
-```
+\`\`\`
 
 #### Backend & Services
-```json
+\`\`\`json
 {
   "@supabase/supabase-js": "^2.0", // Database client
   "@supabase/ssr": "^0.5.0",       // Server-side auth
   "groq-sdk": "^0.4.0",            // AI API client (LLaMA)
   "stripe": "^17.0.0"              // Payments integration
 }
-```
+\`\`\`
 
 #### Why Groq LLaMA 3.1 70B?
 - **Performanță:** 200+ tokens/sec (vs OpenAI GPT-4: 40 tokens/sec)
@@ -308,7 +308,7 @@ SELECT * FROM users WHERE deleted_at IS NULL
 
 #### 1. AI Diagnostic Generation cu Retry Logic
 
-```typescript
+\`\`\`typescript
 // app/actions/diag.ts
 const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
   method: "POST",
@@ -339,11 +339,11 @@ try {
   const jsonMatch = aiContent.match(/\{[\s\S]*\}/)
   parsedDiagnosis = jsonMatch ? JSON.parse(jsonMatch[0]) : defaultDiagnosis
 }
-```
+\`\`\`
 
 #### 2. Server-Side Form Validation
 
-```typescript
+\`\`\`typescript
 // app/actions/admin-crud-actions.ts
 export async function updateUser(formData: FormData) {
   const email = formData.get("email") as string
@@ -363,11 +363,11 @@ export async function updateUser(formData: FormData) {
   await UserModel.update(userId, { email })
   return { success: true }
 }
-```
+\`\`\`
 
 #### 3. Dynamic Pricing cu Subscription Tier
 
-```typescript
+\`\`\`typescript
 // app/actions/diag.ts
 const calculatePrice = (basePrice: number, tier: string) => {
   if (tier === "premium") {
@@ -377,7 +377,7 @@ const calculatePrice = (basePrice: number, tier: string) => {
 }
 
 const estimatedCost = calculatePrice(baseCost, subscription_tier)
-```
+\`\`\`
 
 ---
 
@@ -386,28 +386,28 @@ const estimatedCost = calculatePrice(baseCost, subscription_tier)
 ### 3.1 Pașii de Instalare - Programator
 
 #### Prerequisite
-```bash
+\`\`\`bash
 Node.js >= 20.9.0
 npm >= 10.0.0
 Git
-```
+\`\`\`
 
 #### 1. Clone repository
-```bash
+\`\`\`bash
 git clone https://github.com/your-repo/autocare-ai.git
 cd autocare-ai
-```
+\`\`\`
 
 #### 2. Instalare dependențe
-```bash
+\`\`\`bash
 npm install
-```
+\`\`\`
 
 #### 3. Configurare Environment Variables
 
 Creați fișier `.env.local`:
 
-```env
+\`\`\`env
 # Supabase
 SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_ANON_KEY=your-anon-key
@@ -424,45 +424,45 @@ NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
 
 # Development
 NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL=http://localhost:3000/dashboard
-```
+\`\`\`
 
 #### 4. Setup Database (Supabase)
 
 Rulați scripturile SQL în ordinea:
-```bash
+\`\`\`bash
 scripts/001_create_users_and_profiles.sql
 scripts/002_create_subscriptions.sql
 scripts/003_create_diagnostics.sql
 scripts/004_add_soft_delete.sql  # Opțional - Lab 9
-```
+\`\`\`
 
 **Sau:** Importați schema din Supabase Dashboard → SQL Editor
 
 #### 5. Rulare development server
-```bash
+\`\`\`bash
 npm run dev
-```
+\`\`\`
 
 Accesați: `http://localhost:3000`
 
 #### 6. Creare cont Admin
 
 **Manual în Supabase:**
-```sql
+\`\`\`sql
 -- După sign-up, promovează user la admin
 UPDATE users SET role = 'admin' WHERE email = 'admin@example.com';
-```
+\`\`\`
 
 ### 3.2 Instalare la Beneficiar (Production)
 
 #### Deploy pe Vercel (Recomandat)
 
 1. **Push cod pe GitHub**
-```bash
+\`\`\`bash
 git add .
 git commit -m "Ready for production"
 git push origin main
-```
+\`\`\`
 
 2. **Conectare Vercel**
 - Accesați [vercel.com](https://vercel.com)

@@ -9,7 +9,7 @@ Acest document te ajută să răspunzi rapid la întrebări despre aplicație î
 
 ### 🗂️ STRUCTURA PROIECTULUI
 
-```
+\`\`\`
 proiect-master/
 ├── app/                          # Frontend (Next.js Pages)
 │   ├── actions/                  # API/Backend Logic (Server Actions)
@@ -24,7 +24,7 @@ proiect-master/
 │   └── logging/                  # Sistem de Logging
 ├── scripts/                      # SQL pentru baza de date
 └── components/                   # Componente React reutilizabile
-```
+\`\`\`
 
 ---
 
@@ -33,9 +33,9 @@ proiect-master/
 ### **Tabele Principale (3 entități cu relații)**
 
 #### 1️⃣ **PROFILES** (Utilizatori)
-```sql
+\`\`\`sql
 Locație: scripts/001_create_users_and_profiles.sql
-```
+\`\`\`
 
 **Coloane importante:**
 - `id` - UUID (PK, FK cu auth.users)
@@ -50,9 +50,9 @@ Locație: scripts/001_create_users_and_profiles.sql
 - ONE-TO-MANY cu `subscriptions` (un user → multe abonamente)
 
 #### 2️⃣ **SUBSCRIPTIONS** (Abonamente)
-```sql
+\`\`\`sql
 Locație: scripts/002_create_subscriptions.sql
-```
+\`\`\`
 
 **Coloane importante:**
 - `id` - UUID (PK)
@@ -66,9 +66,9 @@ Locație: scripts/002_create_subscriptions.sql
 - MANY-TO-ONE cu `profiles` (multe abonamente ← un user)
 
 #### 3️⃣ **DIAGNOSTICS** (Diagnostice Auto)
-```sql
+\`\`\`sql
 Locație: scripts/003_create_diagnostics.sql
-```
+\`\`\`
 
 **Coloane importante:**
 - `id` - UUID (PK)
@@ -91,9 +91,9 @@ Locație: scripts/003_create_diagnostics.sql
 ## 🔧 BACKEND (API/Server Actions)
 
 ### **Unde sunt API-urile?**
-```
+\`\`\`
 app/actions/ - Toate funcțiile backend (Server Actions Next.js)
-```
+\`\`\`
 
 ### **Fișiere Backend principale:**
 
@@ -173,7 +173,7 @@ app/actions/ - Toate funcțiile backend (Server Actions Next.js)
 
 ### **Componente importante:**
 
-```
+\`\`\`
 components/
 ├── diagnostic-form.tsx         # Formular diagnosticare AI
 ├── diagnostic-result.tsx       # Afișare rezultat diagnostic
@@ -182,19 +182,19 @@ components/
     ├── user-management-table.tsx
     ├── subscription-management-table.tsx
     └── diagnostics-management-table.tsx
-```
+\`\`\`
 
 ---
 
 ## 🏗️ ARHITECTURA (MVC)
 
 ### **Model Layer** - `lib/models/`
-```typescript
+\`\`\`typescript
 BaseModel           # Clasa de bază ORM cu CRUD generic
 ├── UserModel       # ORM pentru users/profiles
 ├── DiagnosticModel # ORM pentru diagnostics
 └── SubscriptionModel # ORM pentru subscriptions
-```
+\`\`\`
 
 **Ce fac:**
 - Abstractizează accesul la baza de date
@@ -202,13 +202,13 @@ BaseModel           # Clasa de bază ORM cu CRUD generic
 - Queries personalizate pe tabel
 
 ### **Service Layer** - `lib/services/`
-```typescript
+\`\`\`typescript
 UserService         # Logică business pentru useri
 DiagnosticService   # Logică business pentru diagnostice
 SubscriptionService # Logică business pentru abonamente
 CacheService        # Memory cache (Lab 12)
 Logger              # Sistem logging (Lab 11)
-```
+\`\`\`
 
 **Ce fac:**
 - Business logic complexă
@@ -228,9 +228,9 @@ Server Actions care:
 ## 🔑 FUNCȚIONALITĂȚI CHEIE
 
 ### **1. Dependency Injection (Lab 10)**
-```typescript
+\`\`\`typescript
 Locație: lib/di/container.ts
-```
+\`\`\`
 
 **Strategii disponibile:**
 - **SINGLETON** - O singură instanță pentru întreaga aplicație
@@ -240,9 +240,9 @@ Locație: lib/di/container.ts
 **Cum să comiți:** Editează `lib/di/configurator.ts` și decomentează strategia dorită.
 
 ### **2. Memory Cache (Lab 12)**
-```typescript
+\`\`\`typescript
 Locație: lib/services/cache.service.ts
-```
+\`\`\`
 
 **Metode importante:**
 - `get(key)` - Citește din cache
@@ -258,9 +258,9 @@ Locație: lib/services/cache.service.ts
 - `getAdminStats()` - Cache 10 min
 
 ### **3. Logging System (Lab 11)**
-```typescript
+\`\`\`typescript
 Locație: lib/logging/logger.config.ts
-```
+\`\`\`
 
 **Folosit în:**
 - Toate operațiile CRUD (info, error)
@@ -289,10 +289,10 @@ Locație: lib/logging/logger.config.ts
 ## 🤖 AI & TEHNOLOGII
 
 ### **Groq AI Integration**
-```typescript
+\`\`\`typescript
 Locație: app/actions/diagnostic-actions.ts
 Funcție: generateDiagnosis()
-```
+\`\`\`
 
 **Ce face:**
 - Primește simptome + info vehicul
@@ -392,9 +392,9 @@ Funcție: generateDiagnosis()
 ## ⚡ COMENZI RAPIDE
 
 ### **Rulare aplicație:**
-```bash
+\`\`\`bash
 npm run dev
-```
+\`\`\`
 
 ### **Acces aplicație:**
 - **Homepage:** http://localhost:3000
@@ -410,9 +410,9 @@ Rulează în ordine:
 4. (opțional) `009_add_soft_delete_columns.sql`
 
 ### **Setare Admin:**
-```sql
+\`\`\`sql
 UPDATE profiles SET is_admin = true WHERE email = 'cristian.cudla1@student.usv.ro';
-```
+\`\`\`
 
 ---
 

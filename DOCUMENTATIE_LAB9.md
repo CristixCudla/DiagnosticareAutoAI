@@ -18,7 +18,7 @@
 
 **Fișier:** `app/actions/admin-crud-actions.ts`
 
-```typescript
+\`\`\`typescript
 export async function deleteDiagnostic(diagnosticId: string) {
   const supabase = await createClient()
   const isAdmin = await checkIsAdmin()
@@ -47,7 +47,7 @@ export async function deleteDiagnostic(diagnosticId: string) {
     return { error: "Eroare la ștergerea diagnosticului" }
   }
 }
-```
+\`\`\`
 
 **Caracteristici:**
 - Elimină complet înregistrarea din baza de date
@@ -67,7 +67,7 @@ export async function deleteDiagnostic(diagnosticId: string) {
 
 **Scriptul SQL:** `scripts/009_add_soft_delete_columns.sql`
 
-```sql
+\`\`\`sql
 -- Add deleted_at column to profiles
 ALTER TABLE public.profiles
 ADD COLUMN IF NOT EXISTS deleted_at TIMESTAMP WITH TIME ZONE DEFAULT NULL;
@@ -100,13 +100,13 @@ DROP POLICY IF EXISTS "diagnostics_select_own" ON public.diagnostics;
 CREATE POLICY "diagnostics_select_own"
   ON public.diagnostics FOR SELECT
   USING (auth.uid() = user_id AND deleted_at IS NULL);
-```
+\`\`\`
 
 ### Implementare Ștergere Logică
 
 **Fișier:** `app/actions/admin-crud-actions.ts`
 
-```typescript
+\`\`\`typescript
 export async function deleteUser(userId: string) {
   try {
     const supabase = await createClient()
@@ -135,7 +135,7 @@ export async function deleteUser(userId: string) {
     return { error: error instanceof Error ? error.message : "Eroare la ștergerea utilizatorului" }
   }
 }
-```
+\`\`\`
 
 **Caracteristici:**
 - Setează `deleted_at` la timestamp-ul curent
@@ -145,7 +145,7 @@ export async function deleteUser(userId: string) {
 
 ### Implementare Restaurare
 
-```typescript
+\`\`\`typescript
 export async function restoreUser(userId: string) {
   try {
     const supabase = await createClient()
@@ -173,7 +173,7 @@ export async function restoreUser(userId: string) {
     return { error: error instanceof Error ? error.message : "Eroare la restaurarea utilizatorului" }
   }
 }
-```
+\`\`\`
 
 ---
 
@@ -185,7 +185,7 @@ Toate query-urile au fost actualizate pentru a exclude entitățile cu `deleted_
 
 #### Exemplu: getAllUsers()
 
-```typescript
+\`\`\`typescript
 export async function getAllUsers() {
   const { data: profiles, error } = await supabase
     .from("profiles")
@@ -203,11 +203,11 @@ export async function getAllUsers() {
 
   // ...
 }
-```
+\`\`\`
 
 #### Exemplu: getAllSubscriptions()
 
-```typescript
+\`\`\`typescript
 export async function getAllSubscriptions() {
   const { data: subscriptions, error } = await supabase
     .from("subscriptions")
@@ -225,11 +225,11 @@ export async function getAllSubscriptions() {
 
   // ...
 }
-```
+\`\`\`
 
 #### Exemplu: Statistics
 
-```typescript
+\`\`\`typescript
 export async function getAdminStats() {
   // Count only active (not soft-deleted) users
   const { count: totalUsers } = await supabase
@@ -245,7 +245,7 @@ export async function getAdminStats() {
 
   // ...
 }
-```
+\`\`\`
 
 ---
 
@@ -254,22 +254,22 @@ export async function getAdminStats() {
 ### Confirmări Diferite Pentru Fiecare Tip
 
 **Users (Soft Delete):**
-```typescript
+\`\`\`typescript
 if (!confirm(`Sigur vrei să ștergi logic utilizatorul ${email}?\n\nAcesta va fi marcat ca șters dar va rămâne în baza de date pentru istoric.`)) {
   return
 }
-```
+\`\`\`
 
 **Diagnostics (Hard Delete):**
-```typescript
+\`\`\`typescript
 if (!confirm("Sigur vrei să ștergi fizic acest diagnostic?\n\nAcesta va fi eliminat permanent din baza de date (HARD DELETE).")) {
   return
 }
-```
+\`\`\`
 
 ### Tooltipuri Explicative
 
-```tsx
+\`\`\`tsx
 <Button
   title="Ștergere logică - utilizatorul va fi marcat ca șters"
 >
@@ -281,7 +281,7 @@ if (!confirm("Sigur vrei să ștergi fizic acest diagnostic?\n\nAcesta va fi eli
 >
   <Trash2 className="h-4 w-4" />
 </Button>
-```
+\`\`\`
 
 ---
 
