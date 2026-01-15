@@ -1,4 +1,4 @@
-# Proiect Master
+# Proiect DiagnosticAutoAI
 
 <div align="center">
   <img src="/icon.svg" alt="Logo" width="100" height="100">
