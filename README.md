@@ -1,4 +1,4 @@
-# Proiect DiagnosticAutoAI
+# Master Project
 
 <div align="center">
   <img src="/icon.svg" alt="Logo" width="100" height="100">
@@ -14,49 +14,49 @@
 
 ---
 
-## 📋 Cuprins
+## 📋 Table of Contents
 
-- [Despre Proiect](#-despre-proiect)
-- [Caracteristici](#-caracteristici)
+- [About Project](#-about-project)
+- [Features](#-features)
 - [Tech Stack](#-tech-stack)
-- [Prerequisite](#-prerequisite)
-- [Instalare](#-instalare)
-- [Configurare](#-configurare)
-- [Rulare în Dezvoltare](#-rulare-în-dezvoltare)
-- [Build pentru Producție](#-build-pentru-producție)
+- [Prerequisites](#-prerequisites)
+- [Installation](#-installation)
+- [Configuration](#-configuration)
+- [Running in Development](#-running-in-development)
+- [Build for Production](#-build-for-production)
 - [Deploy](#-deploy)
-- [Structura Proiectului](#-structura-proiectului)
-- [Variabile de Mediu](#-variabile-de-mediu)
-- [Scripts Disponibile](#-scripts-disponibile)
-- [Contribuție](#-contribuție)
+- [Project Structure](#-project-structure)
+- [Environment Variables](#-environment-variables)
+- [Available Scripts](#-available-scripts)
+- [Contributing](#-contributing)
 - [License](#-license)
 
 ---
 
-## 🚀 Despre Proiect
+## 🚀 About Project
 
-O aplicație full-stack modernă construită cu Next.js 16, React 19 și TypeScript, care oferă o experiență rapidă și scalabilă pentru utilizatori. Proiectul integrează soluții enterprise-ready pentru autentificare, baze de date și procesare de plăți.
+A modern full-stack application built with Next.js 16, React 19, and TypeScript, providing a fast and scalable experience for users. The project integrates enterprise-ready solutions for authentication, databases, and payment processing.
 
-### 🎯 Scopul Aplicației
+### 🎯 Application Purpose
 
-Această aplicație oferă o platformă completă care conectează utilizatorii cu funcționalități avansate, protejate de autentificare securizată și optimizată pentru performanță maximă.
+This application offers a complete platform that connects users with advanced features, protected by secure authentication and optimized for maximum performance.
 
 ---
 
-## ✨ Caracteristici
+## ✨ Features
 
-- ⚡ **Next.js 16** - Framework React cu App Router și Server Components
-- 🎨 **Tailwind CSS v4** - Styling modern și responsive cu design tokens
-- 🎭 **shadcn/ui** - Componente UI de înaltă calitate și accesibile
-- 🔐 **Supabase Auth** - Autentificare securizată cu email/password
-- 💾 **PostgreSQL** - Bază de date relațională robustă via Supabase
-- 💳 **Stripe Integration** - Procesare plăți și abonamente
-- 🤖 **AI Integration** - Integrare cu Groq pentru capabilități AI
-- 📊 **Vercel Analytics** - Monitorizare trafic și performanță
-- 🌙 **Dark Mode** - Suport nativ pentru tema închisă
-- 📱 **Responsive Design** - Optimizat pentru toate dispozitivele
-- ⚡ **Turbopack** - Bundler ultra-rapid pentru dezvoltare
-- 🔒 **Type Safety** - TypeScript pentru cod sigur și mențenabil
+- ⚡ **Next.js 16** - React framework with App Router and Server Components
+- 🎨 **Tailwind CSS v4** - Modern and responsive styling with design tokens
+- 🎭 **shadcn/ui** - High-quality and accessible UI components
+- 🔐 **Supabase Auth** - Secure authentication with email/password
+- 💾 **PostgreSQL** - Robust relational database via Supabase
+- 💳 **Stripe Integration** - Payment processing and subscriptions
+- 🤖 **AI Integration** - Integration with Groq for AI capabilities
+- 📊 **Vercel Analytics** - Traffic and performance monitoring
+- 🌙 **Dark Mode** - Native support for dark theme
+- 📱 **Responsive Design** - Optimized for all devices
+- ⚡ **Turbopack** - Ultra-fast bundler for development
+- 🔒 **Type Safety** - TypeScript for safe and maintainable code
 
 ---
 
@@ -79,47 +79,47 @@ Această aplicație oferă o platformă completă care conectează utilizatorii 
 
 ---
 
-## 📦 Prerequisite
+## 📦 Prerequisites
 
-Asigură-te că ai instalate următoarele:
+Make sure you have the following installed:
 
-- **Node.js**: versiunea 18.17 sau mai recentă
-- **npm**, **yarn**, sau **pnpm** pentru managementul pachetelor
-- **Git** pentru control versiuni
-- Conturi configurate pentru:
-  - [Supabase](https://supabase.com/) - pentru baza de date și autentificare
-  - [Stripe](https://stripe.com/) - pentru procesare plăți
-  - [Groq](https://groq.com/) - pentru AI capabilities
-  - [Vercel](https://vercel.com/) - pentru deployment (opțional)
+- **Node.js**: version 18.17 or later
+- **npm**, **yarn**, or **pnpm** for package management
+- **Git** for version control
+- Configured accounts for:
+  - [Supabase](https://supabase.com/) - for database and authentication
+  - [Stripe](https://stripe.com/) - for payment processing
+  - [Groq](https://groq.com/) - for AI capabilities
+  - [Vercel](https://vercel.com/) - for deployment (optional)
 
 ---
 
-## 📥 Instalare
+## 📥 Installation
 
-### 1. Clonează repository-ul
+### 1. Clone the repository
 
 ```bash
 git clone <repository-url>
-cd proiect-master
+cd master-project
 ```
 
-### 2. Instalează dependențele
+### 2. Install dependencies
 
 ```bash
 npm install
-# sau
+# or
 yarn install
-# sau
+# or
 pnpm install
 ```
 
 ---
 
-## ⚙️ Configurare
+## ⚙️ Configuration
 
-### Variabile de Mediu
+### Environment Variables
 
-Creează un fișier `.env.local` în root-ul proiectului cu următoarele variabile:
+Create a `.env.local` file in the project root with the following variables:
 
 ```env
 # Supabase
@@ -128,7 +128,7 @@ SUPABASE_ANON_KEY=your_supabase_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL=http://localhost:3000
 
-# Supabase Database (Generat automat)
+# Supabase Database (Auto-generated)
 SUPABASE_POSTGRES_URL=your_postgres_url
 SUPABASE_POSTGRES_PRISMA_URL=your_postgres_prisma_url
 SUPABASE_POSTGRES_URL_NON_POOLING=your_postgres_url_non_pooling
@@ -146,81 +146,81 @@ STRIPE_SECRET_KEY=your_stripe_secret_key
 API_KEY_GROQ_API_KEY=your_groq_api_key
 ```
 
-### Setup Baza de Date
+### Database Setup
 
-1. Conectează-te la [Supabase Dashboard](https://app.supabase.com/)
-2. Creează un nou proiect sau folosește unul existent
-3. Rulează migrările din folderul `scripts/` (dacă există)
-4. Configurează Row Level Security (RLS) policies pentru securitate
+1. Connect to [Supabase Dashboard](https://app.supabase.com/)
+2. Create a new project or use an existing one
+3. Run migrations from the `scripts/` folder (if available)
+4. Configure Row Level Security (RLS) policies for security
 
-### Setup Stripe
+### Stripe Setup
 
-1. Conectează-te la [Stripe Dashboard](https://dashboard.stripe.com/)
-2. Obține cheile API din modul Developers
-3. Configurează webhook-uri pentru evenimente (dacă e necesar)
-4. Adaugă produse și prețuri în catalog
+1. Connect to [Stripe Dashboard](https://dashboard.stripe.com/)
+2. Get API keys from the Developers module
+3. Configure webhooks for events (if necessary)
+4. Add products and prices to your catalog
 
 ---
 
-## 🚀 Rulare în Dezvoltare
+## 🚀 Running in Development
 
 ```bash
 npm run dev
-# sau
+# or
 yarn dev
-# sau
+# or
 pnpm dev
 ```
 
-Deschide [http://localhost:3000](http://localhost:3000) în browser pentru a vizualiza aplicația.
+Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
 
 ---
 
-## 🏗 Build pentru Producție
+## 🏗 Build for Production
 
 ```bash
 npm run build
 npm start
 ```
 
-Acest proces va:
-1. Compila și optimiza aplicația
-2. Genera pagini statice unde este posibil
-3. Pregăti aplicația pentru deployment
+This process will:
+1. Compile and optimize the application
+2. Generate static pages where possible
+3. Prepare the application for deployment
 
 ---
 
 ## 🌐 Deploy
 
-### Deploy pe Vercel (Recomandat)
+### Deploy to Vercel (Recommended)
 
-Cea mai simplă metodă de deploy pentru aplicații Next.js:
+The simplest way to deploy Next.js applications:
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new)
 
-1. Conectează repository-ul GitHub/GitLab/Bitbucket
-2. Configurează variabilele de mediu în Vercel Dashboard
-3. Deploy automat la fiecare push pe branch-ul principal
+1. Connect your GitHub/GitLab/Bitbucket repository
+2. Configure environment variables in Vercel Dashboard
+3. Automatic deployment on each push to the main branch
 
-### Deploy manual
+### Manual Deploy
 
 ```bash
 npm run build
 ```
 
-Apoi deploy folderul `.next` pe orice platformă care suportă Node.js.
+Then deploy the `.next` folder to any Node.js-compatible platform.
 
 ---
 
-## 📁 Structura Proiectului
+## 📁 Project Structure
 
 ```
-proiect-master/
+master-project/
 ├── app/                      # Next.js App Router
-│   ├── layout.tsx           # Root layout cu metadata și fonts
+│   ├── layout.tsx           # Root layout with metadata and fonts
 │   ├── page.tsx             # Homepage
-│   └── globals.css          # Stiluri globale și design tokens
-├── components/              # Componente React reutilizabile
+│   └── globals.css          # Global styles and design tokens
+├── components/              # Reusable React components
 │   └── ui/                  # shadcn/ui components
 │       ├── button.tsx
 │       ├── card.tsx
@@ -229,105 +229,105 @@ proiect-master/
 ├── hooks/                   # Custom React hooks
 │   ├── use-mobile.tsx
 │   └── use-toast.ts
-├── lib/                     # Utilități și configurări
+├── lib/                     # Utilities and configurations
 │   └── utils.ts            # Helper functions (cn, etc.)
 ├── scripts/                 # Database migration scripts
 ├── public/                  # Static assets (images, fonts, icons)
 ├── next.config.mjs          # Next.js configuration
 ├── tsconfig.json           # TypeScript configuration
-├── package.json            # Dependencies și scripts
-└── README.md               # Documentație proiect
+├── package.json            # Dependencies and scripts
+└── README.md               # Project documentation
 ```
 
 ---
 
-## 🔐 Variabile de Mediu
+## 🔐 Environment Variables
 
-### Variabile Publice (NEXT_PUBLIC_*)
-Aceste variabile sunt expuse în browser:
-- `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` - Cheie publică Stripe
-- `NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL` - URL redirect pentru dev
+### Public Variables (NEXT_PUBLIC_*)
+These variables are exposed in the browser:
+- `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` - Stripe public key
+- `NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL` - Redirect URL for dev
 
-### Variabile Private
-Accesibile doar pe server (Server Components, API Routes):
-- `SUPABASE_SERVICE_ROLE_KEY` - Acces admin la Supabase
-- `STRIPE_SECRET_KEY` - Cheie secretă Stripe
-- `API_KEY_GROQ_API_KEY` - Cheie API Groq
+### Private Variables
+Accessible only on the server (Server Components, API Routes):
+- `SUPABASE_SERVICE_ROLE_KEY` - Admin access to Supabase
+- `STRIPE_SECRET_KEY` - Stripe secret key
+- `API_KEY_GROQ_API_KEY` - Groq API key
 
-⚠️ **Nu expune niciodată variabilele private în cod client!**
+⚠️ **Never expose private variables in client code!**
 
 ---
 
-## 📜 Scripts Disponibile
+## 📜 Available Scripts
 
 ```bash
-# Dezvoltare
-npm run dev           # Start development server cu Turbopack
+# Development
+npm run dev           # Start development server with Turbopack
 
 # Build
-npm run build         # Build pentru producție
+npm run build         # Build for production
 npm start             # Start production server
 
 # Linting & Formatting
-npm run lint          # Rulează ESLint
-npm run lint:fix      # Fix automatic erori ESLint
+npm run lint          # Run ESLint
+npm run lint:fix      # Auto-fix ESLint errors
 
 # Type Checking
-npm run type-check    # Verifică erorile TypeScript
+npm run type-check    # Check TypeScript errors
 ```
 
 ---
 
-## 🤝 Contribuție
+## 🤝 Contributing
 
-Contribuțiile sunt binevenite! Pentru a contribui:
+Contributions are welcome! To contribute:
 
-1. Fork repository-ul
-2. Creează un branch pentru feature (`git checkout -b feature/AmazingFeature`)
-3. Commit modificările (`git commit -m 'Add some AmazingFeature'`)
-4. Push pe branch (`git push origin feature/AmazingFeature`)
-5. Deschide un Pull Request
+1. Fork the repository
+2. Create a branch for your feature (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-### Guidelines pentru Contribuție
+### Contributing Guidelines
 
-- Urmează structura de cod existentă
-- Scrie cod TypeScript type-safe
-- Testează toate modificările înainte de PR
-- Documentează funcțiile și componentele noi
-- Folosește conventional commits
+- Follow the existing code structure
+- Write type-safe TypeScript code
+- Test all changes before submitting a PR
+- Document new functions and components
+- Use conventional commits
 
 ---
 
 ## 📄 License
 
-Acest proiect este licențiat sub [MIT License](LICENSE).
+This project is licensed under the [MIT License](LICENSE).
 
 ---
 
 ## 📧 Contact & Support
 
-Pentru întrebări, probleme sau sugestii:
+For questions, issues, or suggestions:
 
-- 🐛 [Raportează un bug](../../issues/new?template=bug_report.md)
-- 💡 [Sugerează un feature](../../issues/new?template=feature_request.md)
-- 📖 [Documentație Next.js](https://nextjs.org/docs)
+- 🐛 [Report a bug](../../issues/new?template=bug_report.md)
+- 💡 [Suggest a feature](../../issues/new?template=feature_request.md)
+- 📖 [Next.js Documentation](https://nextjs.org/docs)
 - 💬 [Discord Community](https://discord.gg/nextjs)
 
 ---
 
-## 🙏 Mulțumiri
+## 🙏 Acknowledgments
 
-- [Vercel](https://vercel.com/) - Pentru Next.js și hosting
-- [shadcn](https://ui.shadcn.com/) - Pentru componentele UI
-- [Supabase](https://supabase.com/) - Pentru backend și autentificare
-- [Stripe](https://stripe.com/) - Pentru infrastructura de plăți
+- [Vercel](https://vercel.com/) - For Next.js and hosting
+- [shadcn](https://ui.shadcn.com/) - For UI components
+- [Supabase](https://supabase.com/) - For backend and authentication
+- [Stripe](https://stripe.com/) - For payment infrastructure
 
 ---
 
 <div align="center">
   
-  **Construit cu ❤️ de Cristian Cudla folosind Next.js**
+  **Built with ❤️ by Cristian Cudla using Next.js**
   
-  [⬆ Înapoi sus](#proiect-master)
+  [⬆ Back to top](#master-project)
   
 </div>
